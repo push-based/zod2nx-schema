@@ -1,0 +1,35 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "required": ["project", "skipConfig", "skipFormat"],
+  "additionalProperties": true,
+  "$id": "ConfigurationSchema",
+  "title": "ConfigurationSchema Generator Options",
+  "properties": {
+    "project": {
+      "describe": "The name of the project.",
+      "prompt": "Which project should configure Zod2NxSchema?",
+      "dropdown": "projects",
+      "default": {
+        "source": "argv",
+        "index": 0
+      },
+      "type": "string"
+    },
+    "bin": {
+      "describe": "Path to Zod2NxSchema CLI",
+      "type": "string"
+    },
+    "skipConfig": {
+      "describe": "Skip adding the zod2nx-schema.config.ts to the project root.",
+      "default": false,
+      "type": "boolean"
+    },
+    "skipFormat": {
+      "describe": "Skip formatting of changed files",
+      "default": false,
+      "type": "boolean"
+    }
+  },
+  "description": "configuration generator"
+}

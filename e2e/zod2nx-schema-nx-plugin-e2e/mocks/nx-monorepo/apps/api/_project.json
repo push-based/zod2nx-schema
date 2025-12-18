@@ -1,0 +1,9 @@
+{
+  "name": "api",
+  "projectType": "application",
+  "targets": {
+    "code-pushup": {
+      "command": "npx @push-based/zod2nx-schema --config=apps/api/zod2nx-schema.config.js"
+    }
+  }
+}

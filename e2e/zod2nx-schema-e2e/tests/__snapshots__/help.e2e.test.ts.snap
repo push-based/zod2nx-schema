@@ -1,0 +1,40 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CLI help > should print help with help command 1`] = `
+"
+Usage: zod-to-nx-schema [command] [options]
+
+Commands:
+  convert                      Converts zod object to Nx schema (default command)
+  print-config                 Print configuration from a config file
+  help                         Print help
+
+Options (for default command):
+  --fromPkg<path>              Path to package.json of the Nx plugin (optional, autoderives schemas)
+  --schema<path>               Path to the module that exports the Zod schema (required)
+  --outPath <path>             Path where the schema.json file should be written (optional, auto-derived if not provided)
+  --exportName <name>          Name of the export (default: 'default')
+  --title <title>              Title for the schema
+  --description <desc>         Description for the schema
+  --no-includeCommandDefault   Don't add Nx $default for command parameter
+  --no-additionalProperties    Don't allow additional properties
+
+Options (for print-config command):
+  --config <path>              Path to the config file to print
+  --output <path>              Output file path (optional, prints to stdout if not provided)
+
+Examples:
+  # Basic usage
+  zod-to-nx-schema --schemaModulePath ./src/schema.ts
+
+  # With custom output path
+  zod-to-nx-schema --schemaModulePath ./src/schema.ts --outputPath ./custom.json
+
+  # Print config
+  zod-to-nx-schema print-config --config=./code-pushup.config.ts
+
+  # Print config to file
+  zod-to-nx-schema print-config --config=./code-pushup.config.ts --output=config.json
+    
+"
+`;

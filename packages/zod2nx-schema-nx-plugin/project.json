@@ -1,0 +1,65 @@
+{
+  "name": "zod2nx-schema-nx-plugin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/nx-plugin/src",
+  "projectType": "library",
+  "targets": {
+    "zod2nx-schema": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["zod2nx-schema:build"],
+      "options": {
+        "command": "tsx",
+        "args": [
+          "packages/zod2nx-schema/src/bin/bin.js",
+          "--fromPkg=packages/zod2nx-schema-nx-plugin/package.json",
+          "--config=packages/zod2nx-schema-nx-plugin/zod2nx-schema.config.ts",
+          "--tsconfig=tsconfig.base.json"
+        ],
+        "env": {
+          "NODE_OPTIONS": "--import tsx",
+          "TSX_TSCONFIG_PATH": "tsconfig.base.json"
+        }
+      }
+    },
+    "build": {
+      "dependsOn": ["^build", "zod2nx-schema"],
+      "options": {
+        "assets": [
+          "{projectRoot}/*.md",
+          {
+            "input": "{projectRoot}/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "{projectRoot}/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "{projectRoot}",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "{projectRoot}",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "options": {
+        "lintFilePatterns": [
+          "packages/nx-plugin/**/*.ts",
+          "packages/nx-plugin/package.json",
+          "packages/nx-plugin/generators.json"
+        ]
+      }
+    },
+    "unit-test": {},
+    "int-test": {}
+  },
+  "tags": ["scope:tooling", "type:feature", "publishable"]
+}

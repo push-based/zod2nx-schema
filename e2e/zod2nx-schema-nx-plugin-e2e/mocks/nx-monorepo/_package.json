@@ -1,0 +1,7 @@
+{
+  "name": "zod2nx-schema-monorepo",
+  "version": "0.0.1",
+  "description": "Test monorepo for e2e tests",
+  "private": true,
+  "devDependencies": {}
+}

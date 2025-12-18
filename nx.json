@@ -1,0 +1,156 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "os": [{ "runtime": "node -e \"console.log(require('os').platform())\"" }],
+    "production": [
+      "default",
+      "!{projectRoot}/README.md",
+      "!{projectRoot}/CHANGELOG.md",
+      "!{projectRoot}/perf/**/*",
+      "!{projectRoot}/tools/**/*",
+      "!{projectRoot}/zod2nx-schema.config.ts",
+      "!{projectRoot}/eslint.config.?(c)js",
+      "!{projectRoot}/@(test|mocks|mock)/**/*",
+      "!{projectRoot}/**/?(*.)test.[jt]s?(x)?(.snap)",
+      "!{projectRoot}/**/?(*.)mocks.[jt]s?(x)",
+      "!{projectRoot}/**/?(*.)mock.[jt]s?(x)",
+      "!{projectRoot}/vitest.@(unit|int|e2e).config.[jt]s",
+      "!{projectRoot}/dist/**/*",
+      "!{projectRoot}/tsconfig.@(test|tools).json",
+      "!{workspaceRoot}/**/(*.)coverage/**/*"
+    ],
+    "test-vitest-inputs": [
+      "os",
+      { "env": "NX_VERBOSE_LOGGING" },
+      { "externalDependencies": ["vitest"] }
+    ],
+    "lint-eslint-inputs": [{ "externalDependencies": ["eslint"] }],
+    "typecheck-typescript-inputs": [{ "externalDependencies": ["typescript"] }],
+    "sharedGlobals": [{ "runtime": "node -v" }, { "runtime": "npm -v" }]
+  },
+  "targetDefaults": {
+    "lint": {
+      "inputs": ["default", "lint-eslint-inputs"],
+      "cache": true,
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "eslint",
+        "args": [
+          "'{projectRoot}/**/*.ts'",
+          "{projectRoot}/package.json",
+          "--config={projectRoot}/eslint.config.js",
+          "--max-warnings=0",
+          "--no-warn-ignored",
+          "--error-on-unmatched-pattern=false"
+        ]
+      }
+    },
+    "build": {
+      "inputs": ["production", "^production"],
+      "dependsOn": ["^build"],
+      "cache": true,
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "{projectRoot}/dist",
+        "main": "{projectRoot}/src/index.ts",
+        "tsConfig": "{projectRoot}/tsconfig.lib.json",
+        "assets": ["{projectRoot}/*.md"]
+      }
+    },
+    "unit-test": {
+      "cache": true,
+      "inputs": ["default", "test-vitest-inputs"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectName}/unit-tests/lcov.info"
+      ],
+      "executor": "@nx/vite:test",
+      "options": {
+        "configFile": "{projectRoot}/vitest.unit.config.ts",
+        "coverage": {
+          "enabled": true
+        }
+      }
+    },
+    "int-test": {
+      "cache": true,
+      "inputs": ["default", "test-vitest-inputs"],
+      "outputs": ["{workspaceRoot}/coverage/{projectName}/int-tests/lcov.info"],
+      "executor": "@nx/vite:test",
+      "options": {
+        "configFile": "{projectRoot}/vitest.int.config.ts",
+        "coverage": {
+          "enabled": true
+        }
+      }
+    },
+    "e2e": {
+      "cache": true,
+      "inputs": ["default", "test-vitest-inputs"],
+      "executor": "@nx/vite:test",
+      "options": {
+        "configFile": "{projectRoot}/vitest.e2e.config.ts"
+      }
+    },
+    "nxv-pkg-install": {
+      "parallelism": false
+    },
+    "nx-release-publish": {
+      "dependsOn": ["build"],
+      "executor": "@nx/js:release-publish",
+      "options": {
+        "packageRoot": "{projectRoot}/dist",
+        "registry": "https://registry.npmjs.org/"
+      }
+    }
+  },
+  "workspaceLayout": {
+    "libsDir": "packages"
+  },
+  "generators": {},
+  "release": {
+    "projects": ["packages/*"],
+    "projectsRelationship": "fixed",
+    "changelog": {
+      "automaticFromRef": true,
+      "projectChangelogs": false,
+      "workspaceChangelog": {
+        "createRelease": "github"
+      }
+    },
+    "git": {
+      "commit": true,
+      "push": true,
+      "pushRemote": "origin",
+      "tag": true,
+      "commitMessage": "release: {version}"
+    },
+    "version": {
+      "conventionalCommits": true,
+      "preserveLocalDependencyProtocols": false,
+      "versionActionsOptions": {
+        "skipLockFileUpdate": true
+      }
+    },
+    "releaseTagPattern": "v{version}"
+  },
+  "plugins": [
+    {
+      "plugin": "@push-based/nx-verdaccio",
+      "options": {
+        "environments": {
+          "environmentsDir": "tmp/e2e",
+          "targetNames": ["e2e"],
+          "inferredTargets": {
+            "e2e": "e2e-test"
+          }
+        },
+        "packages": {
+          "filterByTags": ["publishable"]
+        }
+      }
+    }
+  ],
+  "nxCloudId": "65d4d862d2adb16a45a4bc7c"
+}

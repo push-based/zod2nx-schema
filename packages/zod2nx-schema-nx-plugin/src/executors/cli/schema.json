@@ -1,0 +1,59 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "additionalProperties": true,
+  "$id": "CliSchema",
+  "title": "CliSchema Executor Options",
+  "properties": {
+    "verbose": {
+      "describe": "Print additional logs",
+      "type": "boolean"
+    },
+    "dryRun": {
+      "describe": "Print the commands that would be run, but don't actually run them",
+      "type": "boolean"
+    },
+    "bin": {
+      "describe": "Path to CLI binary",
+      "type": "string"
+    },
+    "command": {
+      "describe": "The command to run (e.g., 'convert')",
+      "type": "string",
+      "enum": ["convert", "print-config", "help"],
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "fromPkg": {
+      "describe": "Path to package.json of the Nx plugin for auto deriving schemas",
+      "type": "string"
+    },
+    "config": {
+      "describe": "Path to a configuration file (if not provided, e.g. zod2nx-schema.config.ts)",
+      "type": "string"
+    },
+    "tsconfig": {
+      "describe": "Path to a TypaScript configuration file used to resolve config files",
+      "type": "string"
+    },
+    "output": {
+      "describe": "Output path for print-config command (if not provided, prints to stdout)",
+      "type": "string"
+    },
+    "schema": {
+      "description": "Path to the module exporting the Zod schema",
+      "type": "string"
+    },
+    "outPath": {
+      "description": "Path to output the generated JSON schema file",
+      "type": "string"
+    },
+    "exportName": {
+      "description": "Name of the export in the module (default: \"default\")",
+      "type": "string"
+    }
+  },
+  "description": "CodePushup CLI executor. Executes the @push-based/cli command's See: https://github.com/push-based/cli/blob/main/packages/cli/README.md#commands"
+}

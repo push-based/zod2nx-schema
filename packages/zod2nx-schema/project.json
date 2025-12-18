@@ -1,0 +1,41 @@
+{
+  "name": "zod2nx-schema",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/zod2nx-schema/src",
+  "projectType": "library",
+  "tags": ["scope:core", "type:lib", "publishable"],
+  "targets": {
+    "lint": {},
+    "unit-test": {},
+    "int-test": {},
+    "build": {
+      "options": {
+        "assets": [
+          "{projectRoot}/*.md",
+          {
+            "input": "{projectRoot}/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "{projectRoot}/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "{projectRoot}/src",
+            "glob": "**/bin/*.js",
+            "output": "./src"
+          }
+        ]
+      }
+    },
+    "demo": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "nx run @push-based/zod2nx-schema --inputFile=./tools/zod2nx-schema/demo/input-schema.ts --outputFile=./tools/zod2nx-schema/demo/output-schema.ts"
+      },
+      "dependsOn": ["build"]
+    }
+  }
+}

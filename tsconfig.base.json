@@ -1,0 +1,36 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": false,
+    "target": "es2022",
+    "module": "esnext",
+    "lib": ["es2023", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
+    "paths": {
+      "@push-based/test-nx-utils": ["testing/test-nx-utils/src/index.ts"],
+      "@push-based/test-setup": ["testing/test-setup/src/index.ts"],
+      "@push-based/test-setup-config": [
+        "testing/test-setup-config/src/index.ts"
+      ],
+      "@push-based/test-utils": ["testing/test-utils/src/index.ts"],
+      "@push-based/zod2nx-schema": ["packages/zod2nx-schema/src/index.ts"],
+      "@push-based/zod2nx-schema-nx-plugin": [
+        "packages/zod2nx-schema-nx-plugin/src/index.ts"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

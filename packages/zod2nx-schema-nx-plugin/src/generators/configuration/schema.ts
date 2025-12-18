@@ -1,0 +1,36 @@
+import { z } from 'zod';
+
+export const configGeneratorOptionsSchema = z.object({
+  project: z.string().meta({
+    describe: 'The name of the project.',
+    prompt: 'Which project should configure Zod2NxSchema?',
+    dropdown: 'projects',
+    default: {
+      source: 'argv',
+      index: 0,
+    },
+  }),
+
+  bin: z
+    .string()
+    .meta({
+      describe: 'Path to Zod2NxSchema CLI',
+    })
+    .optional(),
+
+  skipConfig: z.boolean().default(false).meta({
+    describe: 'Skip adding the zod2nx-schema.config.ts to the project root.',
+    default: false,
+  }),
+
+  skipFormat: z.boolean().default(false).meta({
+    describe: 'Skip formatting of changed files',
+    default: false,
+  }),
+});
+
+export type ConfigGeneratorOptions = z.infer<
+  typeof configGeneratorOptionsSchema
+>;
+
+export default configGeneratorOptionsSchema;

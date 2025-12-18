@@ -1,0 +1,16 @@
+{
+  "name": "zod2nx-schema-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/cli-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "lint": {},
+    "e2e": {
+      "options": {
+        "configFile": "{projectRoot}/vitest.e2e.config.ts"
+      }
+    }
+  },
+  "implicitDependencies": ["zod2nx-schema"],
+  "tags": ["scope:core", "scope:plugin", "type:e2e"]
+}

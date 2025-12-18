@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "required": ["skipPackageJson", "skipInstall", "skipNxJson"],
+  "additionalProperties": true,
+  "$id": "InitSchema",
+  "title": "InitSchema Generator Options",
+  "properties": {
+    "skipPackageJson": {
+      "default": false,
+      "type": "boolean"
+    },
+    "skipInstall": {
+      "default": false,
+      "type": "boolean"
+    },
+    "skipNxJson": {
+      "default": false,
+      "type": "boolean"
+    }
+  },
+  "description": "init generator"
+}

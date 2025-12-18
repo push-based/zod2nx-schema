@@ -1,0 +1,16 @@
+{
+  "name": "zod2nx-schema-nx-plugin-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "e2e/zod2nx-schema-nx-plugin-e2e/src",
+  "projectType": "application",
+  "targets": {
+    "lint": {},
+    "e2e": {
+      "options": {
+        "configFile": "{projectRoot}/vitest.e2e.config.ts"
+      }
+    }
+  },
+  "implicitDependencies": ["zod2nx-schema", "zod2nx-schema-nx-plugin"],
+  "tags": ["scope:tooling", "type:e2e"]
+}
