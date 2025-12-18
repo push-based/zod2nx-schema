@@ -36,7 +36,6 @@
           - 'nx.json'
           - '.nvmrc'
           - '.prettierrc'
-          - '.github/ISSUE_TEMPLATE/**'
           - '.husky/**'
           - 'commitlint.config.mjs'
           - '.verdaccio/config.yml'
