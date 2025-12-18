@@ -44,21 +44,14 @@ describe('CLI convert', () => {
         path.join('src', `${schemaName}.ts`),
         path.join('src', `args-${schemaName}.json`),
       ],
-      cwd: envRoot,
+      cwd: testFileDir,
     });
 
     expect(code).toBe(0);
     expect(stdout).toContain('Converting 1 schema file');
 
     const output = await readFile(
-      path.join(
-        process.cwd(),
-        envRoot,
-        TEST_OUTPUT_DIR,
-        'convert',
-        'src',
-        `args-${schemaName}.json`,
-      ),
+      path.join(testFileDir, 'src', `args-${schemaName}.json`),
       'utf8',
     );
     expect(output).toContain(`$schema`);
