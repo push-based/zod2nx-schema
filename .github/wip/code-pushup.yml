@@ -1,0 +1,69 @@
+name: Code PushUp
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+env:
+  NX_NON_NATIVE_HASHER: true
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+
+permissions:
+  pull-requests: write
+
+jobs:
+  standalone:
+    runs-on: ubuntu-latest
+    name: Standalone mode
+    # ignore PRs from forks, handled by code-pushup-fork.yml
+    if: ${{ !github.event.pull_request.head.repo.fork }}
+    env:
+      CP_API_KEY: ${{ secrets.CP_API_KEY }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Set base and head for Nx affected commands
+        uses: nrwl/nx-set-shas@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Code PushUp action
+        uses: ./.github/actions/code-pushup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          mode: standalone
+
+  monorepo:
+    runs-on: ubuntu-latest
+    name: Monorepo mode
+    # ignore PRs from forks, handled by code-pushup-fork.yml
+    if: ${{ !github.event.pull_request.head.repo.fork }}
+    env:
+      CP_API_KEY: ${{ secrets.CP_API_KEY }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Set base and head for Nx affected commands
+        uses: nrwl/nx-set-shas@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Code PushUp action
+        uses: ./.github/actions/code-pushup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          mode: monorepo

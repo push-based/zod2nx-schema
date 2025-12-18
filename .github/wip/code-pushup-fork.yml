@@ -1,0 +1,67 @@
+name: Code PushUp (fork)
+
+# separated from code-pushup.yml for security reasons
+# => requires permissions to create PR comment
+# => for PRs from forks, needs to run on `pull_request_target`, not `pull_request`
+# => `pull_request_target` is a security risk when secrets are being used
+# => secrets needed for code-pushup upload
+# => code-pushup for forks runs in separate workflow with no secrets access
+
+on:
+  pull_request_target:
+    branches: [main]
+
+env:
+  NX_NON_NATIVE_HASHER: true
+
+permissions:
+  pull-requests: write
+
+jobs:
+  standalone:
+    runs-on: ubuntu-latest
+    name: Standalone mode (fork)
+    if: github.event.pull_request.head.repo.fork
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Set base and head for Nx affected commands
+        uses: nrwl/nx-set-shas@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Code PushUp action
+        uses: ./.github/actions/code-pushup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          mode: standalone
+
+  monorepo:
+    runs-on: ubuntu-latest
+    name: Monorepo mode (fork)
+    if: github.event.pull_request.head.repo.fork
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - name: Set base and head for Nx affected commands
+        uses: nrwl/nx-set-shas@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Run Code PushUp action
+        uses: ./.github/actions/code-pushup
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          mode: monorepo
