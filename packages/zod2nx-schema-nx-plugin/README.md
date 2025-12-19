@@ -1,8 +1,8 @@
-# @push-based/nx-plugin
+# @push-based/zod2nx-schema-nx-plugin
 
 ### Plugin
 
-Register this plugin in your `nx.json` to leverage a set of generators and executors to integrate Code PushUp into a Nx workspace.
+Register this plugin in your `nx.json` to leverage a set of generators and executors to integrate zod2nx-schema into a Nx workspace.
 
 #### Registration
 
@@ -10,7 +10,7 @@ Register this plugin in your `nx.json` to leverage a set of generators and execu
 // nx.json
 {
   //...
-  "plugins": ["@push-based/nx-plugin"],
+  "plugins": ["@push-based/zod2nx-schema-nx-plugin"],
 }
 ```
 
@@ -33,13 +33,13 @@ Examples:
 
 #### Configuration
 
-Adds a `push-based` target to your `project.json`.
+Adds a `zod2nx-schema` target to your `project.json`.
 See [configuration generator docs](./src/generators/configuration/README.md) for details
 
 Examples:
 
-- `nx g @push-based/nx-plugin:configuration --project=<project-name>`
-- `nx g @push-based/nx-plugin:configuration --project=<project-name> --targetName=cp`
+- `nx g @push-based/zod2nx-schema-nx-plugin:configuration --project=<project-name>`
+- `nx g @push-based/zod2nx-schema-nx-plugin:configuration --project=<project-name> --targetName=zod2nx`
 
 ### Executor
 

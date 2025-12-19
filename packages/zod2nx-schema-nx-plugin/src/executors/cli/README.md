@@ -1,9 +1,9 @@
 # Command Executor
 
-This executor is used to run the Code PushUp CLI in an Nx workspace.
-For details on the CLI command read the [CLI commands documentation](https://github.com/push-based/cli/blob/main/packages/cli/README.md#commands).
+This executor is used to run the zod2nx-schema CLI in an Nx workspace.
+For details on the CLI command read the [CLI documentation](https://github.com/push-based/zod2nx-schema#readme).
 
-#### @push-based/nx-plugin:cli
+#### @push-based/zod2nx-schema-nx-plugin:cli
 
 ## Usage
 
@@ -14,15 +14,15 @@ Configure a target in your `project.json`.
 {
   "name": "my-project",
   "targets": {
-    "push-based": {
-      "executor": "@push-based/nx-plugin:cli",
+    "zod2nx-schema": {
+      "executor": "@push-based/zod2nx-schema-nx-plugin:cli",
     },
   },
 }
 ```
 
 Run
-`nx run <project-name>:push-based`
+`nx run <project-name>:zod2nx-schema`
 
 ```text
 Root/
@@ -49,12 +49,11 @@ The following things happen:
 {
   "name": "my-project",
   "targets": {
-    "push-based": {
-      "executor": "@push-based/nx-plugin:autorun",
+    "zod2nx-schema": {
+      "executor": "@push-based/zod2nx-schema-nx-plugin:cli",
       "options": {
-        "projectPrefix": "cli", // upload.project = cli-my-project
+        "projectPrefix": "cli",
         "verbose": true,
-        // persist and upload options as defined in CoreConfig
       },
     },
   },
@@ -63,7 +62,7 @@ The following things happen:
 
 Show what will be executed without actually executing it:
 
-`nx run my-project:push-based --dryRun`
+`nx run my-project:zod2nx-schema --dryRun`
 
 ## Options
 
@@ -71,6 +70,6 @@ Show what will be executed without actually executing it:
 | ----------------- | --------- | ------------------------------------------------------------------ |
 | **projectPrefix** | `string`  | prefix for upload.project on non root projects                     |
 | **dryRun**        | `boolean` | To debug the executor, dry run the command without real execution. |
-| **bin**           | `string`  | Path to Code PushUp CLI                                            |
+| **bin**           | `string`  | Path to zod2nx-schema CLI                                          |
 
-For all other options, see the [CLI autorun documentation](../../../../cli/README.md#autorun-command).
+For all other options, see the [CLI documentation](https://github.com/push-based/zod2nx-schema#readme).
