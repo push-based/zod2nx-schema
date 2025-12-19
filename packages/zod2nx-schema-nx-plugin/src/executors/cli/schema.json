@@ -20,11 +20,7 @@
     "command": {
       "describe": "The command to run (e.g., 'convert')",
       "type": "string",
-      "enum": [
-        "convert",
-        "print-config",
-        "help"
-      ],
+      "enum": ["convert", "print-config", "help"],
       "$default": {
         "$source": "argv",
         "index": 0

@@ -32,12 +32,15 @@ function transformPropertyToNx(
     'source' in defaultValue
   ) {
     const { source, ...defaultRest } = defaultValue;
+    /* eslint-disable @typescript-eslint/consistent-type-assertions */
+    const $default = {
+      ...(source ? { $source: source } : {}),
+      ...defaultRest,
+    } as NxJSONSchema['$default'];
+    /* eslint-enable @typescript-eslint/consistent-type-assertions */
     return {
       ...rest,
-      $default: {
-        ...(source ? { $source: source } : {}),
-        ...defaultRest,
-      } as NxJSONSchema['$default'],
+      $default,
     };
   }
 

@@ -22,7 +22,7 @@ describe('configurationGenerator', () => {
   it('should create zod2nx-schema.config.ts file', async () => {
     await configurationGenerator(tree, { project: testProjectName });
 
-    expect(tree.exists('od2nx-schema.config.ts')).toBe(true);
+    expect(tree.exists('zod2nx-schema.config.ts')).toBe(true);
   });
 
   it('should skip config file creation when skipConfig is true', async () => {
@@ -31,7 +31,7 @@ describe('configurationGenerator', () => {
       skipConfig: true,
     });
 
-    expect(tree.exists('od2nx-schema.config.ts')).toBe(false);
+    expect(tree.exists('zod2nx-schema.config.ts')).toBe(false);
   });
 
   it('should format files by default', async () => {

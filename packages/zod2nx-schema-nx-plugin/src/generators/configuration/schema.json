@@ -1,11 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
   "type": "object",
-  "required": [
-    "project",
-    "skipConfig",
-    "skipFormat"
-  ],
+  "required": ["project", "skipConfig", "skipFormat"],
   "additionalProperties": true,
   "$id": "ConfigurationSchema",
   "title": "ConfigurationSchema Generator Options",

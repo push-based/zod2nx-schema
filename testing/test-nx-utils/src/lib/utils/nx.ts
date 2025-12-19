@@ -176,7 +176,11 @@ export async function registerPluginInWorkspaceFile(
 export async function nxShowProjectJson(
   workspaceRoot: string,
   projectName: string,
-): Promise<{ code: number | null; projectJson: Record<string, unknown>, error?: any }> {
+): Promise<{
+  code: number | null;
+  projectJson: Record<string, unknown>;
+  error?: unknown;
+}> {
   const { exec } = await import('node:child_process');
   const { promisify } = await import('node:util');
 
@@ -189,7 +193,7 @@ export async function nxShowProjectJson(
     );
     const projectJson = JSON.parse(stdout) as Record<string, unknown>;
     return { code: 0, projectJson };
-  } catch (error: any) {
+  } catch (error: unknown) {
     return { code: 1, projectJson: {}, error };
   }
 }

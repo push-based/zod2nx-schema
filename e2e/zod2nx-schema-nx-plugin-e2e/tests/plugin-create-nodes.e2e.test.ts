@@ -17,7 +17,6 @@ import {
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { afterEach, expect } from 'vitest';
-import {error} from "@actions/core";
 
 describe('nx-plugin', () => {
   const project = 'ui';
@@ -43,7 +42,8 @@ describe('nx-plugin', () => {
     );
 
     const { code, projectJson, error } = await nxShowProjectJson(cwd, project);
-    expect(error).toBe('');
+    expect(error).toHaveProperty('message', '');
+    expect(code).toBe(0);
 
     expect(projectJson['targets']).toEqual({
       'zod2nx-schema--configuration': {

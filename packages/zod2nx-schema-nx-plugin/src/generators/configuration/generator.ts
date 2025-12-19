@@ -17,7 +17,7 @@ export async function configurationGenerator(
   if (skipConfig === true) {
     logger.info('Skip config file creation');
   } else {
-    tree.write('od2nx-schema.config.ts', 'export default [];\n');
+    tree.write('zod2nx-schema.config.ts', 'export default [];\n');
   }
 
   if (skipFormat === true) {
