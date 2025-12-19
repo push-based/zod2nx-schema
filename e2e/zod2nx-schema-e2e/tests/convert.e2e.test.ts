@@ -9,7 +9,7 @@ import {
   ZOD2NX_SCHEMA_CONFIG_NAME,
   executeProcess,
 } from '@push-based/zod2nx-schema';
-import { cp, readFile, symlink } from 'node:fs/promises';
+import { cp, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { beforeAll, expect } from 'vitest';
 
@@ -26,14 +26,12 @@ describe('CLI convert', () => {
 
   const schemaName = 'schema';
 
+  const configFilePath = (name: string) =>
+    path.join(process.cwd(), testFileDir, 'config', name);
+
   beforeAll(async () => {
     await cp(fixtureDummyDir, testFileDir, { recursive: true });
     await restoreNxIgnoredFiles(testFileDir);
-    // Symlink .npmrc so npm can find the local verdaccio registry when running from testFileDir
-    await symlink(
-      path.join(process.cwd(), envRoot, '.npmrc'),
-      path.join(testFileDir, '.npmrc'),
-    );
   });
 
   afterAll(async () => {
@@ -63,22 +61,29 @@ describe('CLI convert', () => {
   });
 
   it('should execute convert command with config file', async () => {
-    const outPath = `src/config-file-${schemaName}.json`;
-    const configPath = path.join(
-      'config',
-      `custom.${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`,
-    );
     const { code, stdout } = await executeProcess({
       command: 'npx',
-      args: ['@push-based/zod2nx-schema', 'convert', `--config=${configPath}`],
-      cwd: testFileDir,
+      args: [
+        '@push-based/zod2nx-schema',
+        'convert',
+        `--config=${configFilePath(`custom.${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`)}`,
+      ],
+      cwd: envRoot,
     });
 
     expect(code).toBe(0);
 
     expect(stdout).toContain(`custom.${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`);
 
-    const output = await readFile(path.join(testFileDir, outPath), 'utf8');
+    const output = await readFile(
+      path.join(
+        process.cwd(),
+        testFileDir,
+        'src',
+        `config-file-${schemaName}.json`,
+      ),
+      'utf8',
+    );
     expect(JSON.parse(output)).toStrictEqual({
       test: 42,
     });
