@@ -35,10 +35,10 @@ function transformPropertyToNx(
     return {
       ...rest,
       $default: {
-        $source: source,
+        ...(source ? { $source: source } : {}),
         ...defaultRest,
-      },
-    } as NxJSONSchemaDefinition;
+      } as NxJSONSchema['$default'],
+    };
   }
 
   return prop;
