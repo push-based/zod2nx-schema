@@ -41,10 +41,10 @@ describe('CLI convert', () => {
       args: [
         '@push-based/zod2nx-schema',
         'convert',
-        path.join('src', `${schemaName}.ts`),
-        path.join('src', `args-${schemaName}.json`),
+        path.join(TEST_OUTPUT_DIR, 'convert', 'src', `${schemaName}.ts`),
+        path.join(TEST_OUTPUT_DIR, 'convert', 'src', `args-${schemaName}.json`),
       ],
-      cwd: testFileDir,
+      cwd: envRoot,
     });
 
     expect(code).toBe(0);
@@ -60,13 +60,15 @@ describe('CLI convert', () => {
   it('should execute convert command with config file', async () => {
     const outPath = `src/config-file-${schemaName}.json`;
     const configPath = path.join(
+      TEST_OUTPUT_DIR,
+      'convert',
       'config',
       `custom.${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`,
     );
     const { code, stdout } = await executeProcess({
       command: 'npx',
       args: ['@push-based/zod2nx-schema', 'convert', `--config=${configPath}`],
-      cwd: testFileDir,
+      cwd: envRoot,
     });
 
     expect(code).toBe(0);
