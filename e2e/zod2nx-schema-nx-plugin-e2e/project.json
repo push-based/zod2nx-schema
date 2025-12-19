@@ -11,6 +11,6 @@
       }
     }
   },
-  "implicitDependencies": ["zod2nx-schema", "zod2nx-schema-nx-plugin"],
+  "implicitDependencies": ["zod2nx-schema-nx-plugin"],
   "tags": ["scope:tooling", "type:e2e"]
 }

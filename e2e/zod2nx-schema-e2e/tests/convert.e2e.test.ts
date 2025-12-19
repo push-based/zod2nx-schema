@@ -85,7 +85,17 @@ describe('CLI convert', () => {
       'utf8',
     );
     expect(JSON.parse(output)).toStrictEqual({
-      test: 42,
+      $id: 'ExampleSchemaFromConfig',
+      $schema: 'http://json-schema.org/schema',
+      additionalProperties: true,
+      properties: {
+        key: {
+          type: 'string',
+        },
+      },
+      required: ['key'],
+      title: 'Example Schema defined config file',
+      type: 'object',
     });
   });
 
