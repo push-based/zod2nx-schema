@@ -10,11 +10,11 @@
       "describe": "The name of the project.",
       "prompt": "Which project should configure Zod2NxSchema?",
       "dropdown": "projects",
-      "default": {
-        "source": "argv",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
         "index": 0
-      },
-      "type": "string"
+      }
     },
     "bin": {
       "describe": "Path to Zod2NxSchema CLI",

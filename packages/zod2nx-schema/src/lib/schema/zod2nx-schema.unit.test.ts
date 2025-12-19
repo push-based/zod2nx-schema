@@ -208,4 +208,27 @@ describe('zod2nxSchema', () => {
       type: 'number',
     });
   });
+
+  it('should transform meta default/source to $default/$source for Nx compatibility', () => {
+    const schema = z.object({
+      project: z.string().meta({
+        describe: 'The project name',
+        default: {
+          source: 'argv',
+          index: 0,
+        },
+      }),
+    });
+
+    const result = zod2nxSchema(schema, {
+      name: 'TestSchema',
+      includeCommandDefault: false,
+    });
+
+    expect(result.properties).toHaveProperty('project', {
+      type: 'string',
+      describe: 'The project name',
+      $default: { $source: 'argv', index: 0 },
+    });
+  });
 });
