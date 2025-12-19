@@ -2,8 +2,8 @@
   "name": "utils",
   "projectType": "library",
   "targets": {
-    "code-pushup": {
-      "command": "npx @code-pushup/cli --config=libs/utils/code-pushup.config.js"
+    "zod2nx-schema": {
+      "command": "npx @push-based/zod2nx-schema --config=libs/utils/zod2nx-schema.config.js"
     }
   }
 }
