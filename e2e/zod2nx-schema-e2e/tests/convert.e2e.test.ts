@@ -9,7 +9,7 @@ import {
   ZOD2NX_SCHEMA_CONFIG_NAME,
   executeProcess,
 } from '@push-based/zod2nx-schema';
-import { cp, readFile } from 'node:fs/promises';
+import { cp, readFile, symlink } from 'node:fs/promises';
 import path from 'node:path';
 import { beforeAll, expect } from 'vitest';
 
@@ -29,6 +29,11 @@ describe('CLI convert', () => {
   beforeAll(async () => {
     await cp(fixtureDummyDir, testFileDir, { recursive: true });
     await restoreNxIgnoredFiles(testFileDir);
+    // Symlink .npmrc so npm can find the local verdaccio registry when running from testFileDir
+    await symlink(
+      path.join(process.cwd(), envRoot, '.npmrc'),
+      path.join(testFileDir, '.npmrc'),
+    );
   });
 
   afterAll(async () => {
@@ -60,15 +65,13 @@ describe('CLI convert', () => {
   it('should execute convert command with config file', async () => {
     const outPath = `src/config-file-${schemaName}.json`;
     const configPath = path.join(
-      TEST_OUTPUT_DIR,
-      'convert',
       'config',
       `custom.${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`,
     );
     const { code, stdout } = await executeProcess({
       command: 'npx',
       args: ['@push-based/zod2nx-schema', 'convert', `--config=${configPath}`],
-      cwd: envRoot,
+      cwd: testFileDir,
     });
 
     expect(code).toBe(0);
