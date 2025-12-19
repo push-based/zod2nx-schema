@@ -10,7 +10,10 @@ import {
   removeColorCodes,
   teardownTestFolder,
 } from '@push-based/test-utils';
-import { executeProcess } from '@push-based/zod2nx-schema';
+import {
+  ZOD2NX_SCHEMA_CONFIG_NAME,
+  executeProcess,
+} from '@push-based/zod2nx-schema';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { afterEach, expect } from 'vitest';
@@ -105,7 +108,10 @@ describe('nx-plugin', () => {
       cwd,
       '@push-based/zod2nx-schema-nx-plugin',
     );
-    await writeFile(path.join(cwd, projectRoot), 'export default []');
+    await writeFile(
+      path.join(cwd, projectRoot, `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`),
+      'export default []',
+    );
 
     const { code, projectJson } = await nxShowProjectJson(cwd, project);
 
@@ -127,7 +133,10 @@ describe('nx-plugin', () => {
       cwd,
       '@push-based/zod2nx-schema-nx-plugin',
     );
-    await writeFile(path.join(cwd, projectRoot), 'export default []');
+    await writeFile(
+      path.join(cwd, projectRoot, `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`),
+      'export default []',
+    );
 
     const { code, projectJson } = await nxShowProjectJson(cwd, project);
     expect(code).toBe(0);
@@ -151,7 +160,10 @@ describe('nx-plugin', () => {
     await registerPluginInWorkspaceFile(cwd, {
       plugin: '@push-based/zod2nx-schema-nx-plugin',
     });
-    await writeFile(path.join(cwd, projectRoot), `export default []`);
+    await writeFile(
+      path.join(cwd, projectRoot, `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`),
+      'export default []',
+    );
 
     const { stdout } = await executeProcess({
       command: 'npx',
@@ -180,7 +192,10 @@ describe('nx-plugin', () => {
         bin: binPath,
       },
     });
-    await writeFile(path.join(cwd, projectRoot), `export default []`);
+    await writeFile(
+      path.join(cwd, projectRoot, `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`),
+      'export default []',
+    );
 
     const { code, projectJson } = await nxShowProjectJson(cwd, project);
 
@@ -205,7 +220,10 @@ describe('nx-plugin', () => {
         projectPrefix: 'cli',
       },
     });
-    await writeFile(path.join(cwd, projectRoot), `export default []`);
+    await writeFile(
+      path.join(cwd, projectRoot, `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`),
+      'export default []',
+    );
 
     const { code, projectJson } = await nxShowProjectJson(cwd, project);
 
@@ -230,12 +248,10 @@ describe('nx-plugin', () => {
 
     expect(code).toBe(0);
 
-    // The mock already has a zod2nx-schema target defined, so we just verify it exists
-    // and doesn't have dynamic targets added by the plugin
     expect(projectJson['targets']).toBeDefined();
-    expect(projectJson['targets']).toHaveProperty(
-      'zod2nx-schema',
-      expect.any(Object),
+    expect(projectJson['targets']).toHaveProperty('zod2nx-schema');
+    expect(projectJson['targets']).not.toHaveProperty(
+      'zod2nx-schema--configuration',
     );
   });
 });

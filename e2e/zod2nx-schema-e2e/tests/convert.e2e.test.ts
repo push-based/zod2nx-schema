@@ -61,12 +61,15 @@ describe('CLI convert', () => {
   });
 
   it('should execute convert command with config file', async () => {
+    const customConfigPath = configFilePath(
+      `custom.${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`,
+    );
     const { code, stdout } = await executeProcess({
       command: 'npx',
       args: [
         '@push-based/zod2nx-schema',
         'convert',
-        `--config=${configFilePath(`custom.${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`)}`,
+        `--config=${customConfigPath}`,
       ],
       cwd: envRoot,
     });

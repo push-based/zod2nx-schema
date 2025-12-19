@@ -3,7 +3,7 @@
 
 ---
 
-[![license](https://img.shields.io/github/license/code-pushup/cli)](https://opensource.org/licenses/MIT)
+[![license](https://img.shields.io/github/license/push-based/zod2nx-schema)](https://opensource.org/licenses/MIT)
 
 ---
 
@@ -13,15 +13,15 @@
 
 ## Packages
 
-- **[`@code-pushup/zod2nx-schema`](./packages/zod2nx-schema)** - Core CLI tool for converting Zod schemas to Nx schemas
-- **[`@code-pushup/nx-plugin`](./packages/nx-plugin)** - Nx plugin that integrates the schema generation into your build process
+- **[`@push-based/zod2nx-schema`](./packages/zod2nx-schema)** - Core CLI tool for converting Zod schemas to Nx schemas
+- **[`@push-based/zod2nx-schema-nx-plugin`](./packages/zod2nx-schema-nx-plugin)** - Nx plugin that integrates the schema generation into your build process
 
 ## Quick Start
 
 ### Installation
 
 ```bash
-npm install @code-pushup/zod2nx-schema
+npm install @push-based/zod2nx-schema
 ```
 
 ### Usage
