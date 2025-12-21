@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 type ArgumentValue = number | string | boolean | string[];
 export type CliArgsObject<T extends object = Record<string, ArgumentValue>> =
@@ -114,8 +115,10 @@ export async function loadModuleExport(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   const modulePath = path.resolve(schemaModulePath);
+  // Convert to file:// URL for Windows ESM compatibility
+  const moduleUrl = pathToFileURL(modulePath).href;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const module = (await import(modulePath)) as any;
+  const module = (await import(moduleUrl)) as any;
 
   const exportedValue = module[exportName];
   if (!exportedValue) {
