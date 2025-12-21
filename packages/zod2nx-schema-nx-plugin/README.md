@@ -3,6 +3,7 @@
 ### Plugin
 
 Register this plugin in your `nx.json` to leverage a set of generators and executors to integrate zod2nx-schema into a Nx workspace.
+See [plugin docs](./src/plugin/README.md) for details
 
 #### Registration
 
