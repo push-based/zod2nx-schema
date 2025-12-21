@@ -5,7 +5,7 @@ import {
   readProjectConfiguration,
 } from '@nx/devkit';
 import { ZOD2NX_SCHEMA_CONFIG_NAME } from '@push-based/zod2nx-schema';
-import path from 'node:path';
+import * as path from 'node:path';
 import type { ConfigGeneratorOptions } from './schema.js';
 
 const CONFIG_FILE_NAME = `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`;
