@@ -82,7 +82,6 @@ export async function setupTestWorkspace(
 
   await cp(mockSourceDir, targetDir, { recursive: true });
   await restoreNxIgnoredFiles(targetDir);
-
 }
 
 /**
