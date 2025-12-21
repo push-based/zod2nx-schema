@@ -18,7 +18,7 @@ jobs:
       NX_NON_NATIVE_HASHER: true
       NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
     steps:
-      - name: Authenticate as "Code PushUp Bot" GitHub App
+      - name: Authenticate as "PushBased Bot" GitHub App
         uses: actions/create-github-app-token@v2
         id: app-token
         with:

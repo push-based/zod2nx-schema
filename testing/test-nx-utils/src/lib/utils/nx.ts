@@ -83,30 +83,6 @@ export async function setupTestWorkspace(
   await cp(mockSourceDir, targetDir, { recursive: true });
   await restoreNxIgnoredFiles(targetDir);
 
-  // Create node_modules symlink to the workspace root's node_modules
-  // This allows the test workspace to access installed packages
-  const nodeModulesDir = path.join(targetDir, 'node_modules');
-  const workspaceNodeModules = path.join(process.cwd(), 'node_modules');
-
-  try {
-    // Check if node_modules already exists
-    await stat(nodeModulesDir);
-  } catch {
-    // node_modules doesn't exist, create symlink
-    try {
-      await symlink(workspaceNodeModules, nodeModulesDir, 'dir');
-    } catch {
-      // If symlink fails, try copying instead (for systems that don't support symlinks)
-      console.warn(
-        'Failed to create symlink, attempting to copy node_modules instead',
-      );
-      try {
-        await cp(workspaceNodeModules, nodeModulesDir, { recursive: true });
-      } catch {
-        // If copy also fails, continue anyway - the test might still work
-      }
-    }
-  }
 }
 
 /**
