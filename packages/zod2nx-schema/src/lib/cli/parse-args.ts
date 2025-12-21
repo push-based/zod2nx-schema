@@ -27,6 +27,9 @@ export const cliArgsSchema = z
       describe:
         'Path to a TypaScript configuration file used to resolve config files',
     }),
+    skipFormat: z.boolean().optional().meta({
+      describe: 'Skip formatting generated files with Prettier',
+    }),
     // output only used for the print-config command
     output: z.string().optional().meta({
       describe:
@@ -54,6 +57,7 @@ export function parseCliArgs(argv = process.argv.slice(2)): CliArgs {
       fromPkg: { type: 'string' },
       config: { type: 'string' },
       tsconfig: { type: 'string' },
+      skipFormat: { type: 'boolean' },
       output: { type: 'string' },
 
       exportName: { type: 'string' },
