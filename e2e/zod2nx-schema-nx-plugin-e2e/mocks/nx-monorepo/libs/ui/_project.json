@@ -1,9 +1,5 @@
 {
   "name": "ui",
   "projectType": "library",
-  "targets": {
-    "zod2nx-schema": {
-      "command": "npx @push-based/zod2nx-schema --config=libs/ui/zod2nx-schema.config.js"
-    }
-  }
+  "targets": {}
 }

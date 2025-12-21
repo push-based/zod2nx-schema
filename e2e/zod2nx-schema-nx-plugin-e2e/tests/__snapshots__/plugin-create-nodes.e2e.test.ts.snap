@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`nx-plugin > should NOT add config targets dynamically if the project is configured 1`] = `
+{
+  "zod2nx-schema": {
+    "configurations": {},
+    "executor": "@push-based/zod2nx-schema-nx-plugin:cli",
+    "options": {},
+    "parallelism": true,
+  },
+}
+`;
+
+exports[`nx-plugin > should add configuration target dynamically 1`] = `
+{
+  "zod2nx-schema--configuration": {
+    "configurations": {},
+    "executor": "nx:run-commands",
+    "options": {
+      "command": "nx g @push-based/zod2nx-schema-nx-plugin:configuration --project="ui"",
+    },
+    "parallelism": true,
+  },
+}
+`;
+
+exports[`nx-plugin > should add executor target dynamically if the project is configured 1`] = `
+{
+  "zod2nx-schema": {
+    "configurations": {},
+    "executor": "@push-based/zod2nx-schema-nx-plugin:cli",
+    "options": {},
+    "parallelism": true,
+  },
+}
+`;

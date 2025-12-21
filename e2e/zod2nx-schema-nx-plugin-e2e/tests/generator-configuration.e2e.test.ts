@@ -23,9 +23,9 @@ describe('zod2nx-schema-nx-plugin g configuration', () => {
     'generators-configuration',
   );
 
-  afterEach(async () => {
-    await teardownTestFolder(testFileDir);
-  });
+  // afterEach(async () => {
+  //   await teardownTestFolder(testFileDir);
+  // });
 
   it('should generate zod2nx-schema.config.ts file', async () => {
     const cwd = path.join(testFileDir, 'configure');
