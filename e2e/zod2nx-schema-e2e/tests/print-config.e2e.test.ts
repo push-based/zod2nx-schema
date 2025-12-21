@@ -3,6 +3,7 @@ import {
   E2E_ENVIRONMENTS_DIR,
   TEST_OUTPUT_DIR,
   restoreNxIgnoredFiles,
+  teardownTestFolder,
 } from '@push-based/test-utils';
 import {
   ZOD2NX_SCHEMA_CONFIG_NAME,
@@ -40,7 +41,7 @@ describe('CLI print-config', () => {
   });
 
   afterAll(async () => {
-    // await teardownTestFolder(testFileDir);
+    await teardownTestFolder(testFileDir);
   });
 
   it.each(extensions)(
