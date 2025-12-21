@@ -6,7 +6,7 @@
 
 `nx generate @push-based/zod2nx-schema-nx-plugin:configuration`
 
-By default, the Nx plugin will search for existing configuration files. If they are not present it creates a `zod2nx-schema.config.ts` and adds a target to your `project.json` file.
+By default, the Nx plugin will search for existing configuration files. If they are not present it creates a `zod2nx-schema.config.ts`.
 
 You can specify the project explicitly as follows:
 
@@ -15,7 +15,6 @@ You can specify the project explicitly as follows:
 ```text
 Root/
 ├── project-name/
-│   ├── project.json 👈 updated
 │   ├── zod2nx-schema.config.ts 👈 generated
 │   └── ...
 └── ...
@@ -27,10 +26,9 @@ Show what will be generated without writing to disk:
 
 ## Options
 
-| Name              | type                               | description                                                |
-| ----------------- | ---------------------------------- | ---------------------------------------------------------- |
-| **--project**     | `string` (REQUIRED)                | The name of the project.                                   |
-| **--targetName**  | `string` (DEFAULT 'zod2nx-schema') | The id used to identify a target in your project.json.     |
-| **--bin**         | `string`                           | Path to zod2nx-schema CLI                                  |
-| **--skipProject** | `boolean` (DEFAULT false)          | Skip adding the target to `project.json`.                  |
-| **--skipConfig**  | `boolean` (DEFAULT false)          | Skip adding the `zod2nx-schema.config.ts` to project root. |
+| Name             | type                      | description                                                |
+| ---------------- | ------------------------- | ---------------------------------------------------------- |
+| **--project**    | `string` (REQUIRED)       | The name of the project.                                   |
+| **--bin**        | `string`                  | Path to zod2nx-schema CLI                                  |
+| **--skipConfig** | `boolean` (DEFAULT false) | Skip adding the `zod2nx-schema.config.ts` to project root. |
+| **--skipFormat** | `boolean` (DEFAULT false) | Skip formatting of changed files                           |
