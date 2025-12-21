@@ -17,7 +17,7 @@ describe('createConfigKey', () => {
 
     const key = createConfigKey(config);
 
-    expect(key).toBe('/project/src/schema.ts:mySchema');
+    expect(key).toMatchPath('/project/src/schema.ts:mySchema');
   });
 
   it('should use "default" when exportName is undefined', () => {
@@ -28,7 +28,7 @@ describe('createConfigKey', () => {
 
     const key = createConfigKey(config);
 
-    expect(key).toBe('/project/src/schema.ts:default');
+    expect(key).toMatchPath('/project/src/schema.ts:default');
   });
 
   it('should normalize paths for consistent keys', () => {
@@ -53,7 +53,9 @@ describe('createConfigKey', () => {
     const key = createConfigKey(config);
 
     // path.resolve uses process.cwd() for relative paths
-    expect(key).toBe(`${path.join(process.cwd(), 'src', 'schema.ts')}:default`);
+    expect(key).toMatchPath(
+      `${path.join(process.cwd(), 'src', 'schema.ts')}:default`,
+    );
   });
 });
 
@@ -122,7 +124,7 @@ describe('mergeConfigPair', () => {
 
     const result = mergeConfigPair(existing, incoming);
 
-    expect(result.outPath).toBe('/project/new/path.json');
+    expect(result.outPath).toMatchPath('/project/new/path.json');
   });
 
   it('should preserve existing outPath when incoming is undefined', () => {
@@ -138,7 +140,7 @@ describe('mergeConfigPair', () => {
 
     const result = mergeConfigPair(existing, incoming);
 
-    expect(result.outPath).toBe('/project/existing/path.json');
+    expect(result.outPath).toMatchPath('/project/existing/path.json');
   });
 });
 
