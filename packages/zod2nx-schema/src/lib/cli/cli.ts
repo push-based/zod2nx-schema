@@ -8,6 +8,7 @@ import { logger } from '../utils/logger.js';
 import { groupByStatus } from '../utils/promises.js';
 import { loadConfigFromPackageJson } from './derive-config.js';
 import { helpCommand, isHelpCommand } from './help.command.js';
+import { mergeConfigs } from './merge-configs.js';
 import { parseCliArgs } from './parse-args.js';
 import {
   isPrintConfigCommand,
@@ -56,11 +57,10 @@ export async function runCli(): Promise<void> {
     : undefined;
 
   const generateSchemaOptions = parseManyGenerateSchemaOptions(
-    [
+    mergeConfigs([
       ...loadedConfigs,
       ...(loadedConfigs.length === 0 && configFromCli ? [configFromCli] : []),
-    ],
-    commandArgs,
+    ]),
   );
 
   if (isPrintConfigCommand(args)) {
