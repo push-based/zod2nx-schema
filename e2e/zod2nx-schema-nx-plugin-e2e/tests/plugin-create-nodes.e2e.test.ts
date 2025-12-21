@@ -16,7 +16,7 @@ import {
 } from '@push-based/zod2nx-schema';
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { afterEach, expect } from 'vitest';
+import { afterAll, expect } from 'vitest';
 
 describe('nx-plugin', () => {
   const project = 'ui';
@@ -28,9 +28,9 @@ describe('nx-plugin', () => {
     'plugin-create-nodes',
   );
 
-  // afterEach(async () => {
-  //   await teardownTestFolder(testFileDir);
-  // });
+  afterAll(async () => {
+    await teardownTestFolder(testFileDir);
+  });
 
   it('should add configuration target dynamically', async () => {
     const cwd = path.join(testFileDir, 'add-configuration-dynamically');

@@ -43,7 +43,7 @@ describe('configurationGenerator', () => {
 
     await configurationGenerator(tree, { project: testProjectName });
 
-    expect(tree.read(configPath, 'utf-8')).toBe('existing content');
+    expect(tree.read(configPath, 'utf8')).toBe('existing content');
     expect(loggerWarnSpy).toHaveBeenCalledWith(
       'NOTE: No config file created as zod2nx-schema.config.ts file already exists.',
     );
