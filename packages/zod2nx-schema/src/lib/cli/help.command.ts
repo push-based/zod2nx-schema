@@ -30,10 +30,10 @@ Examples:
   zod-to-nx-schema --schemaModulePath ./src/schema.ts --outputPath ./custom.json
 
   # Print config
-  zod-to-nx-schema print-config --config=./code-pushup.config.ts
+  zod-to-nx-schema print-config --config=./zod2nx-schema.config.ts
 
   # Print config to file
-  zod-to-nx-schema print-config --config=./code-pushup.config.ts --output=config.json
+  zod-to-nx-schema print-config --config=./zod2nx-schema.config.ts --output=config.json
     `;
 
 export function isHelpCommand(args: string[]): boolean {

@@ -167,12 +167,12 @@ describe('SchemaValidationError', () => {
 
   it('should include relative file path if provided', () => {
     const schema = z.object({}).meta({ title: 'CoreConfig' });
-    const filePath = path.join(process.cwd(), 'code-pushup.config.ts');
+    const filePath = path.join(process.cwd(), 'zod2nx-schema.config.ts');
 
     expect(
       new SchemaValidationError(new ZodError([]), schema, { filePath }).message,
     ).toContain(
-      `Invalid ${ansis.bold('CoreConfig')} in ${ansis.bold('code-pushup.config.ts')} file\n`,
+      `Invalid ${ansis.bold('CoreConfig')} in ${ansis.bold('zod2nx-schema.config.ts')} file\n`,
     );
   });
 });

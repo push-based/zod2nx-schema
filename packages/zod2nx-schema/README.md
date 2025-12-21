@@ -15,13 +15,13 @@ A TypeScript library and CLI tool that converts Zod schemas to Nx executor schem
 ## Installation
 
 ```bash
-npm install @zod2nx-schema/zod2nx-schema
+npm install @push-based/zod2nx-schema
 ```
 
 ## Quick Usage
 
 Install the CLI:
-`npm install -g @zod2nx-schema/zod2nx-schema`
+`npm install -g @push-based/zod2nx-schema`
 
 ```bash
 # Auto-derive output filename (./src/schema.ts → ./src/schema.json)
@@ -40,7 +40,7 @@ npx zod2nx-schema ./src/schema.ts --export autorunOptions
 npx zod2nx-schema ./src/schema.ts \
   --export-name autorunOptions \
   --title "Zod2NxSchema CLI executor" \
-  --description "Executes the @zod2nx-schema/cli autorun command"
+  --description "Executes the @push-based/zod2nx-schema CLI"
 
 # Autoderives from Nx plugin package.json
 npx zod2nx-schema --fromPkg ./plugin/package.json
