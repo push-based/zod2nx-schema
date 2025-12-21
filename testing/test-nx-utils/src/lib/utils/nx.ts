@@ -78,8 +78,6 @@ export async function setupTestWorkspace(
   mockSourceDir: string,
   targetDir: string,
 ): Promise<void> {
-  const { symlink, stat } = await import('node:fs/promises');
-
   await cp(mockSourceDir, targetDir, { recursive: true });
   await restoreNxIgnoredFiles(targetDir);
 }
