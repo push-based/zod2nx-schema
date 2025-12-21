@@ -30,3 +30,4 @@ Show what will be generated without writing to disk:
 | --------------------- | --------------------------- | ------------------------------------------- |
 | **--skipPackageJson** | `boolean` (DEFAULT `false`) | Skip adding `package.json` dependencies.    |
 | **--skipNxJson**      | `boolean` (DEFAULT `false`) | Skip updating `nx.json` with configuration. |
+| **--skipInstall**     | `boolean` (DEFAULT `false`) | Skip installing dependencies.               |

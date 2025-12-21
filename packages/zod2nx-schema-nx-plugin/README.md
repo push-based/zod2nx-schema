@@ -33,13 +33,12 @@ Examples:
 
 #### Configuration
 
-Adds a `zod2nx-schema` target to your `project.json`.
+Adds a `zod2nx-schema.config.ts` to your project root.
 See [configuration generator docs](./src/generators/configuration/README.md) for details
 
 Examples:
 
 - `nx g @push-based/zod2nx-schema-nx-plugin:configuration --project=<project-name>`
-- `nx g @push-based/zod2nx-schema-nx-plugin:configuration --project=<project-name> --targetName=zod2nx`
 
 ### Executor
 
@@ -55,7 +54,10 @@ Examples:
   "name": "my-project",
   "targets": {
     "push-based": {
-      "executor": "@push-based/zod2nx-schema-nx-plugin:cli"
+      "executor": "@push-based/zod2nx-schema-nx-plugin:cli",
+      "options": {
+        "config": "zod2nx-schema.config.ts"
+      }
     }
   }
 }
