@@ -3,7 +3,7 @@
     "cli": {
       "implementation": "./src/executors/cli/executor",
       "schema": "./src/executors/cli/schema.json",
-      "description": "CodePushup CLI executor. Executes the @push-based/cli command's See: https://github.com/push-based/cli/blob/main/packages/cli/README.md#commands"
+      "description": "Zod to NxSchema executor. Executes the @push-based/zod2nx-schema command's See: https://github.com/push-based/zod2nx-schema/blob/main/packages/zod2nx-schema/README.md#commands"
     }
   }
 }
