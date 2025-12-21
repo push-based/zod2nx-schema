@@ -109,18 +109,17 @@ export function deriveOutputPath(inputPath: string): string {
  * @returns The exported value from the module
  * @throws Error if the export is not found in the module
  */
-export async function loadModuleExport(
+export async function loadModuleExport<T = Record<string, unknown>>(
   schemaModulePath: string,
   exportName = 'default',
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-): Promise<any> {
+): Promise<T> {
   const modulePath = path.resolve(schemaModulePath);
   // Convert to file:// URL for Windows ESM compatibility
   const moduleUrl = pathToFileURL(modulePath).href;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const module = (await import(moduleUrl)) as any;
 
-  const exportedValue = module[exportName];
+  const exportedValue = module[exportName] as T;
   if (!exportedValue) {
     throw new Error(
       `Export '${exportName}' not found in module '${schemaModulePath}'`,
