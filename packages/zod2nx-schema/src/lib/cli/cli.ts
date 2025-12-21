@@ -15,7 +15,7 @@ import {
 } from './print-config.command.js';
 import { autoloadRc, readRcByPath } from './read-rc-file.js';
 
-/* eslint-disable max-lines-per-function */
+/* eslint-disable-next-line max-lines-per-function */
 export async function runCli(): Promise<void> {
   const args = process.argv.slice(2);
 
@@ -81,4 +81,3 @@ export async function runCli(): Promise<void> {
     throw new Error(rejected.map(f => f.reason).join('\n'));
   }
 }
-/* eslint-enable max-lines-per-function */
