@@ -1,7 +1,6 @@
 import { writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { z } from 'zod';
-import type { CliArgs } from '../cli/parse-args.js';
 import { logger } from '../utils/logger.js';
 import {
   deriveOutputPath,
@@ -90,7 +89,6 @@ export function parseGenerateSchema(
 
 export function parseManyGenerateSchemaOptions(
   schemaOptionsArray: GenerateZod2NxSchemaOptions[],
-  _cliArgs: CliArgs,
 ): ParsedGenerateZod2NxSchemaOptions[] {
   const result = schemaOptionsArray.map(parseGenerateSchema);
 

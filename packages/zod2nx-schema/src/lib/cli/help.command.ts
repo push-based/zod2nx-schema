@@ -9,12 +9,13 @@ Commands:
   help                         Print help
 
 Options (for default command):
-  --fromPkg<path>              Path to package.json of the Nx plugin (optional, autoderives schemas)
-  --schema<path>               Path to the module that exports the Zod schema (required)
+  --fromPkg <path>             Path to package.json of the Nx plugin (optional, autoderives schemas)
+  --schema <path>              Path to the module that exports the Zod schema (required)
   --outPath <path>             Path where the schema.json file should be written (optional, auto-derived if not provided)
   --exportName <name>          Name of the export (default: 'default')
   --title <title>              Title for the schema
   --description <desc>         Description for the schema
+  --skipFormat                 Skip formatting generated files with Prettier
   --no-includeCommandDefault   Don't add Nx $default for command parameter
   --no-additionalProperties    Don't allow additional properties
 

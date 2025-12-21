@@ -5,9 +5,11 @@ import {
   parseManyGenerateSchemaOptions,
 } from '../schema/generate-schema.js';
 import { logger } from '../utils/logger.js';
+import { tryFormatWithPrettier } from '../utils/prettier.js';
 import { groupByStatus } from '../utils/promises.js';
 import { loadConfigFromPackageJson } from './derive-config.js';
 import { helpCommand, isHelpCommand } from './help.command.js';
+import { mergeConfigs } from './merge-configs.js';
 import { parseCliArgs } from './parse-args.js';
 import {
   isPrintConfigCommand,
@@ -23,6 +25,7 @@ export async function runCli(): Promise<void> {
     fromPkg,
     config: configPath,
     tsconfig,
+    skipFormat,
     command,
     output,
     ...commandArgs
@@ -56,11 +59,10 @@ export async function runCli(): Promise<void> {
     : undefined;
 
   const generateSchemaOptions = parseManyGenerateSchemaOptions(
-    [
+    mergeConfigs([
       ...loadedConfigs,
       ...(loadedConfigs.length === 0 && configFromCli ? [configFromCli] : []),
-    ],
-    commandArgs,
+    ]),
   );
 
   if (isPrintConfigCommand(args)) {
@@ -79,5 +81,11 @@ export async function runCli(): Promise<void> {
   );
   if (rejected.length > 0) {
     throw new Error(rejected.map(f => f.reason).join('\n'));
+  }
+
+  // Format generated files with prettier (unless skipped)
+  if (skipFormat !== true) {
+    const generatedFilePaths = generateSchemaOptions.map(opt => opt.outPath);
+    await tryFormatWithPrettier(generatedFilePaths);
   }
 }
