@@ -15,6 +15,7 @@ import {
 } from './print-config.command.js';
 import { autoloadRc, readRcByPath } from './read-rc-file.js';
 
+/* eslint-disable-next-line max-lines-per-function */
 export async function runCli(): Promise<void> {
   const args = process.argv.slice(2);
 
