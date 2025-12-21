@@ -25,6 +25,7 @@ export async function runCli(): Promise<void> {
     fromPkg,
     config: configPath,
     tsconfig,
+    skipFormat,
     command,
     output,
     ...commandArgs
@@ -82,7 +83,9 @@ export async function runCli(): Promise<void> {
     throw new Error(rejected.map(f => f.reason).join('\n'));
   }
 
-  // Format generated files with prettier
-  const generatedFilePaths = generateSchemaOptions.map(opt => opt.outPath);
-  await tryFormatWithPrettier(generatedFilePaths);
+  // Format generated files with prettier (unless skipped)
+  if (skipFormat !== true) {
+    const generatedFilePaths = generateSchemaOptions.map(opt => opt.outPath);
+    await tryFormatWithPrettier(generatedFilePaths);
+  }
 }

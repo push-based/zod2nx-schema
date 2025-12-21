@@ -38,6 +38,10 @@
       "describe": "Path to a TypaScript configuration file used to resolve config files",
       "type": "string"
     },
+    "skipFormat": {
+      "describe": "Skip formatting generated files with Prettier",
+      "type": "boolean"
+    },
     "output": {
       "describe": "Output path for print-config command (if not provided, prints to stdout)",
       "type": "string"
