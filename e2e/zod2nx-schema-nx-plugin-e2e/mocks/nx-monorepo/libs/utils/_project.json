@@ -1,9 +1,5 @@
 {
   "name": "utils",
   "projectType": "library",
-  "targets": {
-    "code-pushup": {
-      "command": "npx @code-pushup/cli --config=libs/utils/code-pushup.config.js"
-    }
-  }
+  "targets": {}
 }

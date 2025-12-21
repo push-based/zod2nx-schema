@@ -1,6 +1,6 @@
-# @push-based/nx-plugin
+# @push-based/zod2nx-schema-nx-plugin
 
-The Nx Plugin for [Code PushUp](https://github.com/push-based/cli#readme), an open source code quality and conformance tool.
+The Nx Plugin for [zod2nx-schema](https://github.com/push-based/zod2nx-schema#readme), a tool to convert Zod schemas to Nx executor schema.json files.
 
 Why should you use this plugin?
 
@@ -15,7 +15,7 @@ Why should you use this plugin?
 // nx.json
 {
   //...
-  "plugins": ["@push-based/nx-plugin"],
+  "plugins": ["@push-based/zod2nx-schema-nx-plugin"],
 }
 ```
 
@@ -27,7 +27,7 @@ or with options:
   //...
   "plugins": [
     {
-      "plugin": "@push-based/nx-plugin",
+      "plugin": "@push-based/zod2nx-schema-nx-plugin",
       "options": {
         "projectPrefix": "cli",
       },
@@ -77,7 +77,7 @@ Pass positional arguments to execute a specific command, use named arguments to 
 - `nx run <project-name>:zod2nx-schema collect`
 - `nx run <project-name>:zod2nx-schema upload --upload.server=https://staging.zod2nx-schema.dev`
 
-For a full list of command visit the [Code PushUp CLI documentation](../../../cli/README.md#commands).
+For a full list of commands visit the [zod2nx-schema CLI documentation](https://github.com/push-based/zod2nx-schema#readme).
 
 ## Options
 
@@ -97,11 +97,11 @@ All options are optional and provided in the `nx.json` file.
     {
       "plugin": "@push-based/zod2nx-schema-nx-plugin",
       "options": {
-        "projectPrefix": "cli"
-        "targetName": "zod2nx"
-        "bin": "dist/package/zod2nx-schema-custom-build"
-      }
-    }
-  ]
+        "projectPrefix": "cli",
+        "targetName": "zod2nx",
+        "bin": "dist/package/zod2nx-schema-custom-build",
+      },
+    },
+  ],
 }
 ```

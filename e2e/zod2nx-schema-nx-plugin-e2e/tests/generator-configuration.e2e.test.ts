@@ -11,7 +11,7 @@ import {
 } from '@push-based/zod2nx-schema';
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
-import { afterEach, expect } from 'vitest';
+import { afterAll, expect } from 'vitest';
 
 describe('zod2nx-schema-nx-plugin g configuration', () => {
   const project = 'ui';
@@ -23,7 +23,7 @@ describe('zod2nx-schema-nx-plugin g configuration', () => {
     'generators-configuration',
   );
 
-  afterEach(async () => {
+  afterAll(async () => {
     await teardownTestFolder(testFileDir);
   });
 
@@ -71,7 +71,7 @@ describe('zod2nx-schema-nx-plugin g configuration', () => {
     const mockDir = path.join(import.meta.dirname, '../mocks/nx-monorepo');
     await setupTestWorkspace(mockDir, cwd);
     await writeFile(
-      path.join(projectRoot, `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`),
+      path.join(cwd, projectRoot, `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`),
       'export default [];',
       'utf8',
     );

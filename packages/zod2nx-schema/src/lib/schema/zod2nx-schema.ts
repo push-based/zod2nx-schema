@@ -11,23 +11,69 @@ import {
 } from './nx.schema.js';
 
 /**
+ * Transforms a property definition to use Nx-specific keys.
+ * Converts `default: { source: ... }` to `$default: { $source: ... }`
+ */
+function transformPropertyToNx(
+  prop: NxJSONSchemaDefinition,
+): NxJSONSchemaDefinition {
+  if (typeof prop === 'boolean') {
+    return prop;
+  }
+
+  const { default: defaultValue, ...rest } = prop as NxJSONSchema & {
+    default?: { source?: string; index?: number };
+  };
+
+  // If there's a default with source (Nx-specific), transform it
+  if (
+    defaultValue &&
+    typeof defaultValue === 'object' &&
+    'source' in defaultValue
+  ) {
+    const { source, ...defaultRest } = defaultValue;
+    /* eslint-disable @typescript-eslint/consistent-type-assertions */
+    const $default = {
+      ...(source ? { $source: source } : {}),
+      ...defaultRest,
+    } as NxJSONSchema['$default'];
+    /* eslint-enable @typescript-eslint/consistent-type-assertions */
+    return {
+      ...rest,
+      $default,
+    };
+  }
+
+  return prop;
+}
+
+/**
  * Helper to build schema properties with optional command default
+ * and transforms Zod meta keys to Nx-specific keys
  */
 function buildSchemaProperties(
   baseProps: Record<string, NxJSONSchemaDefinition>,
   includeCommandDefault?: boolean,
 ): Record<string, NxJSONSchemaDefinition> {
+  // Transform all properties to use Nx-specific keys
+  const transformedProps = Object.fromEntries(
+    Object.entries(baseProps).map(([key, value]) => [
+      key,
+      transformPropertyToNx(value),
+    ]),
+  );
+
   if (!includeCommandDefault) {
-    return baseProps;
+    return transformedProps;
   }
 
-  const command = baseProps['command'];
+  const command = transformedProps['command'];
   if (!command || typeof command === 'boolean') {
-    return baseProps;
+    return transformedProps;
   }
 
   return {
-    ...baseProps,
+    ...transformedProps,
     command: {
       ...command,
       $default: { $source: 'argv', index: 0 },

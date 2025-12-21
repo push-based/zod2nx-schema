@@ -6,23 +6,24 @@ import {
 } from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import * as path from 'node:path';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { configurationGenerator } from './generator.js';
 
 describe('configurationGenerator', () => {
   let tree: Tree;
   const testProjectName = 'test-app';
+  const testProjectRoot = 'test-app';
   const loggerInfoSpy = vi.spyOn(logger, 'info');
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
-    addProjectConfiguration(tree, 'test-app', {
-      root: 'test-app',
+    addProjectConfiguration(tree, testProjectName, {
+      root: testProjectRoot,
     });
   });
 
   afterEach(() => {
-    tree.delete(testProjectName);
+    tree.delete(testProjectRoot);
   });
 
   it('should skip config creation if skipConfig is used', async () => {
@@ -34,7 +35,7 @@ describe('configurationGenerator', () => {
     readProjectConfiguration(tree, testProjectName);
 
     expect(
-      tree.read(path.join('libs', testProjectName, 'zod2nx-schema.config.ts')),
+      tree.read(path.join(testProjectRoot, 'zod2nx-schema.config.ts')),
     ).toBeNull();
     expect(loggerInfoSpy).toHaveBeenCalledWith('Skip config file creation');
   });

@@ -78,54 +78,10 @@ export async function setupTestWorkspace(
   mockSourceDir: string,
   targetDir: string,
 ): Promise<void> {
-  const { symlink, stat } = await import('node:fs/promises');
-
   await cp(mockSourceDir, targetDir, { recursive: true });
   await restoreNxIgnoredFiles(targetDir);
-
-  // Create node_modules symlink to the workspace root's node_modules
-  // This allows the test workspace to access installed packages
-  const nodeModulesDir = path.join(targetDir, 'node_modules');
-  const workspaceNodeModules = path.join(process.cwd(), 'node_modules');
-
-  try {
-    // Check if node_modules already exists
-    await stat(nodeModulesDir);
-  } catch {
-    // node_modules doesn't exist, create symlink
-    try {
-      await symlink(workspaceNodeModules, nodeModulesDir, 'dir');
-    } catch {
-      // If symlink fails, try copying instead (for systems that don't support symlinks)
-      console.warn(
-        'Failed to create symlink, attempting to copy node_modules instead',
-      );
-      try {
-        await cp(workspaceNodeModules, nodeModulesDir, { recursive: true });
-      } catch {
-        // If copy also fails, continue anyway - the test might still work
-      }
-    }
-  }
 }
 
-/**
- * Registers a plugin in the nx.json file by updating the plugins array.
- * This is a file-system based alternative to the Tree-based registerPluginInWorkspace.
- *
- * @param workspaceRoot - Full path to the workspace root
- * @param configuration - Plugin configuration (string or object with plugin name and options)
- *
- * @example
- * ```ts
- * await registerPluginInWorkspaceFile(testDir, '@push-based/nx-plugin');
- * // or
- * await registerPluginInWorkspaceFile(testDir, {
- *   plugin: '@push-based/nx-plugin',
- *   options: { targetName: 'cp' }
- * });
- * ```
- */
 export async function registerPluginInWorkspaceFile(
   workspaceRoot: string,
   configuration: string | { plugin: string; options?: Record<string, unknown> },
@@ -138,13 +94,9 @@ export async function registerPluginInWorkspaceFile(
 
   const normalizedPluginConfiguration: Record<string, unknown> =
     typeof configuration === 'string'
-      ? { plugin: path.join(process.cwd(), 'node_modules', configuration) }
+      ? { plugin: configuration }
       : {
-          plugin: path.join(
-            process.cwd(),
-            'node_modules',
-            configuration.plugin,
-          ),
+          plugin: configuration.plugin,
           ...(configuration.options && { options: configuration.options }),
         };
 
@@ -176,7 +128,11 @@ export async function registerPluginInWorkspaceFile(
 export async function nxShowProjectJson(
   workspaceRoot: string,
   projectName: string,
-): Promise<{ code: number | null; projectJson: Record<string, unknown> }> {
+): Promise<{
+  code: number | null;
+  projectJson: Record<string, unknown>;
+  error?: { message: string; stderr?: string; stdout?: string };
+}> {
   const { exec } = await import('node:child_process');
   const { promisify } = await import('node:util');
 
@@ -188,8 +144,21 @@ export async function nxShowProjectJson(
       { cwd: workspaceRoot },
     );
     const projectJson = JSON.parse(stdout) as Record<string, unknown>;
-    return { code: 0, projectJson };
-  } catch {
-    return { code: 1, projectJson: {} };
+    return { code: 0, projectJson, error: { message: '' } };
+  } catch (error: unknown) {
+    const execError = error as {
+      message?: string;
+      stderr?: string;
+      stdout?: string;
+    };
+    return {
+      code: 1,
+      projectJson: {},
+      error: {
+        message: execError.message ?? 'Unknown error',
+        stderr: execError.stderr,
+        stdout: execError.stdout,
+      },
+    };
   }
 }

@@ -115,7 +115,7 @@ export async function generateSchemaFile(
   } = opt as ParsedGenerateZod2NxSchemaOptions;
   const outputFilePath = path.resolve(outPath);
   try {
-    const zodSchema = await loadModuleExport(schema, exportName);
+    const zodSchema = await loadModuleExport<z.ZodTypeAny>(schema, exportName);
     const nxSchema = zod2nxSchema(zodSchema, {
       ...schemaOptions,
     });

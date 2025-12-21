@@ -1,9 +1,5 @@
 {
   "name": "web",
   "projectType": "application",
-  "targets": {
-    "code-pushup": {
-      "command": "npx @code-pushup/cli --config=apps/web/code-pushup.config.js"
-    }
-  }
+  "targets": {}
 }

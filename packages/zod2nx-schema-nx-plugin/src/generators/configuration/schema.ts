@@ -18,12 +18,12 @@ export const configGeneratorOptionsSchema = z.object({
     })
     .optional(),
 
-  skipConfig: z.boolean().default(false).meta({
+  skipConfig: z.boolean().meta({
     describe: 'Skip adding the zod2nx-schema.config.ts to the project root.',
     default: false,
   }),
 
-  skipFormat: z.boolean().default(false).meta({
+  skipFormat: z.boolean().meta({
     describe: 'Skip formatting of changed files',
     default: false,
   }),
