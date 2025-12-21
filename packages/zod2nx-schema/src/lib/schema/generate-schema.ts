@@ -9,10 +9,11 @@ import {
   toPascalCaseSchemaName,
 } from '../utils/transform.js';
 import {
+  type NxJSONSchema,
   additionalPropertiesSchema,
   descriptionSchema,
   includeCommandDefaultSchema,
-  nameSchema, type NxJSONSchema,
+  nameSchema,
   titleSchema,
 } from './nx.schema.js';
 import {
