@@ -1,14 +1,27 @@
-import {Tree, createProjectGraphAsync, joinPathFragments, logger} from '@nx/devkit';
-import type { SyncGeneratorResult } from 'nx/src/utils/sync-generators';
-import { z } from 'zod';
+import {
+  Tree,
+  createProjectGraphAsync,
+  glob,
+  joinPathFragments,
+  logger,
+} from '@nx/devkit';
 import { bundleRequire } from 'bundle-require';
+import type { SyncGeneratorResult } from 'nx/src/utils/sync-generators';
+import { ZOD2NX_SCHEMA_CONFIG_NAME } from '@push-based/zod2nx-schema';
+import { z } from 'zod';
 
 /**
  * Minimal implementation of zod2nxSchema for sync checking
  */
 function zod2nxSchema(
   zodSchema: z.ZodTypeAny,
-  options: { name: string; title?: string; description?: string; includeCommandDefault?: boolean; additionalProperties?: boolean }
+  options: {
+    name: string;
+    title?: string;
+    description?: string;
+    includeCommandDefault?: boolean;
+    additionalProperties?: boolean;
+  },
 ) {
   const {
     name,
@@ -52,7 +65,10 @@ type ProjectConfig = {
   configs: Zod2NxConfig[];
 };
 
-async function loadConfigFile(tree: Tree, path: string): Promise<Zod2NxConfig[]> {
+async function loadConfigFile(
+  tree: Tree,
+  path: string,
+): Promise<Zod2NxConfig[]> {
   const { mod } = await bundleRequire({
     filepath: path,
     format: 'esm',
@@ -80,7 +96,7 @@ function assertOutOfSync(tree: Tree, message: string): SyncGeneratorResult {
 /**
  * Load a module export dynamically (similar to loadModuleExport from zod2nx-schema)
  */
-function loadModuleExport<T = Record<string, unknown>>(
+export function loadModuleExport<T = Record<string, unknown>>(
   schemaModulePath: string,
   exportName: string = 'default',
 ): T {
@@ -98,137 +114,74 @@ function loadModuleExport<T = Record<string, unknown>>(
   return exportedValue;
 }
 
-export async function syncSchemasSyncGenerator(
-  tree: Tree
-): Promise<SyncGeneratorResult | void> {
+export interface SyncSchemasGeneratorSchema {}
+
+export async function syncSchemasGenerator(
+  tree: Tree,
+  options: SyncSchemasGeneratorSchema,
+  // For testing: allow injecting a custom module loader
+  loadModuleExportFn: typeof loadModuleExport = loadModuleExport,
+): Promise<void> {
   const graph = await createProjectGraphAsync();
   const issues: string[] = [];
-  return assertOutOfSync(tree, '????'+ JSON.stringify(options));
 
-  // If config is provided, use that specific config file
-  if (options.config && tree.exists(options.config)) {
-    try {
-      const configs = await loadConfigFile(tree, options.config);
-      // Process the specific config file
-      for (const cfg of configs) {
-        // Skip configs that don't have schema (e.g., fromPkg configs)
-        if (!cfg.schema) continue;
+  // Find all zod2nx-schema.config files in the workspace
+  const configFiles = await glob(tree, [
+    `**/${ZOD2NX_SCHEMA_CONFIG_NAME}.*`,
+  ]);
 
-        const schemaPath = resolvePath('', cfg.schema);
-        const jsonPath = resolvePath(
-          '',
-          cfg.outPath,
-          cfg.schema ? cfg.schema.replace(/\.ts$/, '.json') : undefined,
-        );
-
-        if (!tree.exists(schemaPath)) {
-          issues.push(`missing schema ${cfg.schema}`);
-          continue;
-        }
-
-        if (!tree.exists(jsonPath)) {
-          issues.push(`missing json ${jsonPath}`);
-          continue;
-        }
-
-        try {
-          const zodSchema = loadModuleExport<z.ZodTypeAny>(
-            schemaPath,
-            cfg.exportName,
-          );
-
-          const expected = zod2nxSchema(zodSchema, {
-            name: cfg.options?.name ?? cfg.schema.split('/').pop() ?? 'Schema',
-            title: cfg.options?.title,
-            description: cfg.options?.description,
-            includeCommandDefault: cfg.options?.includeCommandDefault,
-            additionalProperties: cfg.options?.additionalProperties,
-          });
-
-          const actual = JSON.parse(
-            tree.read(jsonPath, 'utf-8')!,
-          );
-
-          if (!jsonEqual(expected, actual)) {
-            issues.push(`stale schema ${jsonPath}`);
-          }
-        } catch (e) {
-          issues.push(`failed to validate ${jsonPath}: ${(e as Error).message}`);
-        }
-      }
-    } catch (e) {
-      issues.push(`failed to load ${options.config}`);
-    }
+  if (configFiles.length === 0) {
+    logger.info('Skip no config file found');
+    const message = `SYNC!!!! ${new Date().toISOString()}`;
+    tree.write('.out-of-sync.txt', message + '\n');
+    return;
   }
 
-  // If neither fromPkg nor config is provided, fall back to scanning all projects
-  if (!options.fromPkg && !options.config) {
-    for (const node of Object.values(graph.nodes)) {
-      const root = node.data.root;
-      const configPath = [
-        'zod2nx-schema.config.ts',
-        'zod2nx-schema.config.js',
-        'zod2nx-schema.config.mjs',
-      ]
-        .map(p => joinPathFragments(root, p))
-        .find(p => tree.exists(p));
-
-      if (!configPath) continue;
-
-    let configs: Zod2NxConfig[];
+  // Process each config file
+  for (const configFile of configFiles) {
     try {
-      configs = await loadConfigFile(tree, configPath);
-    } catch (e) {
-      issues.push(`${node.name}: failed to load ${configPath}`);
-      continue;
-    }
+      const configs = await loadConfigFile(tree, configFile);
 
-    for (const cfg of configs) {
-      // Skip configs that don't have schema (e.g., fromPkg configs)
-      if (!cfg.schema) continue;
+      for (const config of configs) {
+        const schemaPath = config.schema;
+        const outPath = config.outPath;
 
-      const schemaPath = resolvePath(root, cfg.schema);
-      const jsonPath = resolvePath(
-        root,
-        cfg.outPath,
-        cfg.schema ? cfg.schema.replace(/\.ts$/, '.json') : undefined,
-      );
+        if (!schemaPath || !outPath) continue;
 
-      if (!tree.exists(schemaPath)) {
-        issues.push(`${node.name}: missing schema ${cfg.schema}`);
-        continue;
-      }
+        // Resolve paths relative to the config file directory
+        const configDir = configFile.substring(0, configFile.lastIndexOf('/'));
+        const resolvedSchemaPath = joinPathFragments(configDir, schemaPath);
+        const resolvedOutPath = joinPathFragments(configDir, outPath);
 
-      if (!tree.exists(jsonPath)) {
-        issues.push(`${node.name}: missing json ${jsonPath}`);
-        continue;
-      }
+        // Check sync conditions
+        const schemaExists = tree.exists(resolvedSchemaPath);
+        const jsonExists = tree.exists(resolvedOutPath);
 
-      try {
-        const zodSchema = loadModuleExport<z.ZodTypeAny>(
-          schemaPath,
-          cfg.exportName,
-        );
+        if (schemaExists && !jsonExists) {
+          // Missing: schema.ts exists but schema.json doesn't
+          issues.push(`Missing schema.json file: ${resolvedOutPath} (schema.ts exists)`);
+        } else if (schemaExists && jsonExists) {
+          // Stale: schema.json content doesn't match what would be generated from schema.ts
+          try {
+            const schemaModule = loadModuleExportFn(resolvedSchemaPath, config.exportName);
+            const zodSchema = schemaModule as z.ZodTypeAny;
 
-        const expected = zod2nxSchema(zodSchema, {
-          name: cfg.options?.name ?? cfg.schema.split('/').pop() ?? 'Schema',
-          title: cfg.options?.title,
-          description: cfg.options?.description,
-          includeCommandDefault: cfg.options?.includeCommandDefault,
-          additionalProperties: cfg.options?.additionalProperties,
-        });
+            const expectedJson = zod2nxSchema(zodSchema, config.options || {});
+            const actualJson = JSON.parse(tree.read(resolvedOutPath, 'utf8') || '{}');
 
-        const actual = JSON.parse(
-          tree.read(jsonPath, 'utf-8')!,
-        );
-
-        if (!jsonEqual(expected, actual)) {
-          issues.push(`${node.name}: stale schema ${jsonPath}`);
+            if (!jsonEqual(expectedJson, actualJson)) {
+              issues.push(`Stale schema.json file: ${resolvedOutPath} (content doesn't match schema.ts)`);
+            }
+          } catch (error) {
+            issues.push(`Error processing schema files: ${resolvedSchemaPath} - ${error}`);
+          }
+        } else if (!schemaExists && jsonExists) {
+          // Extra: schema.json exists but schema.ts doesn't
+          issues.push(`Extra schema.json file: ${resolvedOutPath} (schema.ts no longer exists)`);
         }
-      } catch (e) {
-        issues.push(`${node.name}: failed to validate ${jsonPath}: ${(e as Error).message}`);
       }
-    }
+    } catch (error) {
+      logger.warn(`Failed to process config file ${configFile}: ${error}`);
     }
   }
 
@@ -236,18 +189,12 @@ export async function syncSchemasSyncGenerator(
   issues.forEach(issue => console.log(`ISSUE: ${issue}`));
 
   // Always write to file
-  const message = issues.length === 0 ? `SYNC!!!! ${new Date().toISOString()}` : `Zod schemas are out of sync\n${issues.map(i => `- ${i}`).join('\n')}`;
+  const message =
+    issues.length === 0
+      ? `SYNC!!!! ${new Date().toISOString()}`
+      : `Zod schemas are out of sync\n${issues.map(i => `- ${i}`).join('\n')}`;
   console.log(`WRITING MESSAGE: ${message}`);
-  assertOutOfSync(tree, message);
-
-  // Always return a result
-  const result = {
-    outOfSyncMessage: issues.length === 0 ? 'SYNC!!!!' : 'Zod schemas are out of sync',
-    outOfSyncDetails: issues.length === 0 ? undefined : issues.map(i => `- ${i}`),
-  };
-  console.log(`RETURNING:`, result);
-  return result;
+  tree.write('.out-of-sync.txt', message + '\n');
 }
 
-export { syncSchemasSyncGenerator as syncGenerator };
-export default syncSchemasSyncGenerator;
+export default syncSchemasGenerator;

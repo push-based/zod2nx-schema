@@ -26,8 +26,8 @@ This generator is automatically configured as a global sync generator in `nx.jso
 ```jsonc
 {
   "sync": {
-    "globalGenerators": ["@push-based/zod2nx-schema-nx-plugin:sync-schemas"]
-  }
+    "globalGenerators": ["@push-based/zod2nx-schema-nx-plugin:sync-schemas"],
+  },
 }
 ```
 
@@ -54,6 +54,7 @@ nx g @push-based/zod2nx-schema-nx-plugin:sync-schemas
 ## Output Examples
 
 ### No Issues
+
 ```
  NX   The workspace is already up to date
 
@@ -61,6 +62,7 @@ nx g @push-based/zod2nx-schema-nx-plugin:sync-schemas
 ```
 
 ### Issues Found
+
 ```
  NX   The workspace is out of sync
 

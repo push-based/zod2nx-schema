@@ -1,7 +1,5 @@
 import { z } from 'zod';
 
-const schema = z.object({
-    template: z.boolean(),
-});
+const schema = z.object({});
 
 export default schema;

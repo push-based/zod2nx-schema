@@ -46,7 +46,7 @@ describe('nx-plugin g sync-schemas', () => {
     );
   });
 
-  it('should --check for missing schema.ts', async () => {
+  it('should --check valid project', async () => {
     const cwd = path.join(testFileDir, 'nx-update');
     const mockDir = path.join(import.meta.dirname, '../mocks/nx-monorepo');
     await setupTestWorkspace(mockDir, cwd);
@@ -66,8 +66,61 @@ describe('nx-plugin g sync-schemas', () => {
     expect(code).toBe(0);
     const cleanedStdout = removeColorCodes(stdout);
     expect(cleanedStdout).toContain(
-      '[@push-based/zod2nx-schema-nx-plugin:sync-schemas]: Missing sds',
+      'NX  Generating @push-based/zod2nx-schema-nx-plugin:sync-schemas',
     );
+    expect(cleanedStdout).toContain('SYNC GENERATOR: 0 issues found');
+    expect(cleanedStdout).toContain('WRITING MESSAGE: SYNC!!!!');
+    expect(cleanedStdout).toContain('CREATE .out-of-sync.txt');
   });
 
+  it('should --check for missing schema.ts', async () => {
+    const cwd = path.join(testFileDir, 'missing-schema-ts');
+    const mockDir = path.join(import.meta.dirname, '../mocks/nx-monorepo');
+    await setupTestWorkspace(mockDir, cwd);
+
+    // Create a schema.json file without corresponding schema.ts to simulate missing schema.ts
+    const fs = await import('node:fs/promises');
+    const uiLibPath = path.join(cwd, 'libs', 'ui');
+    await fs.mkdir(path.join(uiLibPath, 'src'), { recursive: true });
+
+    // Create a schema.json file that would normally be generated from schema.ts
+    const schemaJsonPath = path.join(uiLibPath, 'src', 'schema.json');
+    await fs.writeFile(
+      schemaJsonPath,
+      JSON.stringify(
+        {
+          $schema: 'http://json-schema.org/schema',
+          $id: 'ui',
+          title: 'UI Schema',
+          type: 'object',
+          properties: {},
+        },
+        null,
+        2,
+      ),
+    );
+
+    const { code, stdout } = await executeProcess({
+      command: 'npx',
+      args: [
+        'nx',
+        'g',
+        '@push-based/zod2nx-schema-nx-plugin:sync-schemas',
+        project,
+        '--skipInstall',
+      ],
+      cwd,
+    });
+
+    expect(code).toBe(0);
+    const cleanedStdout = removeColorCodes(stdout);
+    expect(cleanedStdout).toContain(
+      'NX  Generating @push-based/zod2nx-schema-nx-plugin:sync-schemas',
+    );
+    expect(cleanedStdout).toContain('SYNC GENERATOR: 1 issues found');
+    expect(cleanedStdout).toContain(
+      'WRITING MESSAGE: Zod schemas are out of sync',
+    );
+    expect(cleanedStdout).toContain('CREATE .out-of-sync.txt');
+  });
 });

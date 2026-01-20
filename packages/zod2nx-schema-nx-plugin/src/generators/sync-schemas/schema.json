@@ -3,68 +3,7 @@
   "type": "object",
   "additionalProperties": true,
   "$id": "SyncSchemasSchema",
-  "title": "Sync Schemas Generator Options",
-  "description": "Detect when schema.json files are out of sync with Zod definitions",
-  "properties": {
-    "verbose": {
-      "describe": "Print additional logs",
-      "type": "boolean",
-      "default": false
-    },
-    "dryRun": {
-      "describe": "Print what would be done without making changes",
-      "type": "boolean",
-      "default": true
-    },
-    "projects": {
-      "describe": "Filter to specific project names (comma-separated)",
-      "type": "string"
-    },
-    "include": {
-      "describe": "Glob patterns for config files to include",
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "default": ["zod2nx-schema.config.*"]
-    },
-    "exclude": {
-      "describe": "Glob patterns for config files to exclude",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "fix": {
-      "describe": "Automatically fix sync issues instead of just reporting them",
-      "type": "boolean",
-      "default": false
-    },
-    "fromPkg": {
-      "describe": "Path to Nx plugin package.json for auto-deriving schemas from executors/generators",
-      "type": "string"
-    },
-    "config": {
-      "describe": "Path to a configuration file (auto-detected if not provided)",
-      "type": "string"
-    },
-    "tsconfig": {
-      "describe": "Path to TypeScript configuration for resolving config files",
-      "type": "string"
-    },
-    "exportName": {
-      "describe": "Name of the export in the schema module (default: 'default')",
-      "type": "string",
-      "default": "default"
-    },
-    "skipFormat": {
-      "describe": "Skip formatting generated files with Prettier",
-      "type": "boolean",
-      "default": false
-    },
-    "output": {
-      "describe": "Output path for sync reports",
-      "type": "string"
-    }
-  }
+  "title": "SyncSchemasSchema Generator Options",
+  "properties": {},
+  "description": "Detect when schema.json files are out of sync with Zod definitions"
 }
