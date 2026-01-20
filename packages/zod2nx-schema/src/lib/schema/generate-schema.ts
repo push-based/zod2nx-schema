@@ -131,5 +131,6 @@ export async function generateSchemaFile(
 export async function generateManySchemaFiles(
   generateSchemaArray: ParsedGenerateZod2NxSchemaOptions[],
 ): Promise<PromiseSettledResult<void>[]> {
+  // use MissingSchemaFilesError
   return Promise.allSettled(generateSchemaArray.map(generateSchemaFile));
 }
