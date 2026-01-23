@@ -6,7 +6,6 @@ import {
   teardownTestFolder,
 } from '@push-based/test-utils';
 import { executeProcess } from '@push-based/zod2nx-schema';
-import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { afterEach, expect } from 'vitest';
 

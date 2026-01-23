@@ -1,7 +1,12 @@
 {
   "$schema": "http://json-schema.org/schema",
   "type": "object",
-  "required": ["project", "skipConfig", "skipFormat"],
+  "required": [
+    "project",
+    "skipConfig",
+    "skipFormat",
+    "registerSyncGeneratorLocally"
+  ],
   "additionalProperties": true,
   "$id": "ConfigurationSchema",
   "title": "ConfigurationSchema Generator Options",
@@ -29,6 +34,15 @@
       "type": "boolean",
       "describe": "Skip formatting of changed files",
       "default": false
+    },
+    "registerSyncGeneratorLocally": {
+      "type": "boolean",
+      "describe": "Register the sync generator locally for a specific task",
+      "default": false
+    },
+    "taskName": {
+      "type": "string",
+      "describe": "The task name to register the sync generator for (e.g., build, lint)"
     }
   },
   "description": "Configuration generator"

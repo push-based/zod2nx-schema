@@ -132,6 +132,9 @@
     "libsDir": "packages"
   },
   "generators": {},
+  "sync": {
+    "globalGenerators": ["@push-based/zod2nx-schema-nx-plugin:sync-schemas"]
+  },
   "release": {
     "projects": ["packages/*"],
     "projectsRelationship": "fixed",

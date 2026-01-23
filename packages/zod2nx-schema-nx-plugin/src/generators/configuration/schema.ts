@@ -27,6 +27,19 @@ export const configGeneratorOptionsSchema = z.object({
     describe: 'Skip formatting of changed files',
     default: false,
   }),
+
+  registerSyncGeneratorLocally: z.boolean().meta({
+    describe: 'Register the sync generator locally for a specific task',
+    default: false,
+  }),
+
+  taskName: z
+    .string()
+    .meta({
+      describe:
+        'The task name to register the sync generator for (e.g., build, lint)',
+    })
+    .optional(),
 });
 
 export type ConfigGeneratorOptions = z.infer<

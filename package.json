@@ -15,7 +15,8 @@
   "scripts": {
     "prepare": "husky install",
     "commit": "git-cz",
-    "knip": "knip"
+    "knip": "knip",
+    "nx": "TSX_TSCONFIG_PATH=tsconfig.base.json tsx node_modules/.bin/nx"
   },
   "private": true,
   "dependencies": {

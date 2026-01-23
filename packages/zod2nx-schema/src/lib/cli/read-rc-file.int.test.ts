@@ -28,24 +28,26 @@ describe('readRcByPath', () => {
   });
 
   it('should throw if the path is empty', async () => {
-    await expect(readRcByPath('')).rejects.toThrow("File '' does not exist");
+    await expect(readRcByPath('')).rejects.toThrowError(
+      "File '' does not exist",
+    );
   });
 
   it('should throw if the file does not exist', async () => {
     await expect(
       readRcByPath(path.join('non-existent', 'config.file.js')),
-    ).rejects.toThrow(/File '.*' does not exist/);
+    ).rejects.toThrowError(/File '.*' does not exist/);
   });
 
   it('should throw if the configuration is empty', async () => {
     await expect(
       readRcByPath(path.join(configDirPath, 'zod2nx-schema.empty.config.ts')),
-    ).rejects.toThrow('Invalid input');
+    ).rejects.toThrowError('Invalid input');
   });
 
   it('should throw if the configuration is invalid', async () => {
     await expect(
       readRcByPath(path.join(configDirPath, 'zod2nx-schema.invalid.config.ts')),
-    ).rejects.toThrow('Invalid');
+    ).rejects.toThrowError('Invalid');
   });
 });

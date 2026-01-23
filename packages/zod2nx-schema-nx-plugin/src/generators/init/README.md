@@ -26,8 +26,10 @@ Show what will be generated without writing to disk:
 
 ## Options
 
-| Name                  | type                        | description                                 |
-| --------------------- | --------------------------- | ------------------------------------------- |
-| **--skipPackageJson** | `boolean` (DEFAULT `false`) | Skip adding `package.json` dependencies.    |
-| **--skipNxJson**      | `boolean` (DEFAULT `false`) | Skip updating `nx.json` with configuration. |
-| **--skipInstall**     | `boolean` (DEFAULT `false`) | Skip installing dependencies.               |
+| Name                                | type                        | description                                                            |
+| ----------------------------------- | --------------------------- | ---------------------------------------------------------------------- |
+| **--skipPackageJson**               | `boolean` (DEFAULT `false`) | Skip adding `package.json` dependencies.                               |
+| **--skipNxJson**                    | `boolean` (DEFAULT `false`) | Skip updating `nx.json` with configuration.                            |
+| **--skipInstall**                   | `boolean` (DEFAULT `false`) | Skip installing dependencies.                                          |
+| **--registerSyncGeneratorGlobally** | `boolean` (DEFAULT `false`) | Register the sync generator globally in nx.json sync.globalGenerators. |
+| **--registerPlugin**                | `boolean` (DEFAULT `false`) | Register the plugin in nx.json plugins array.                          |

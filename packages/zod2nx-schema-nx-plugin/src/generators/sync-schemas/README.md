@@ -21,12 +21,30 @@ The sync schemas generator follows the same mental model as Nx's TypeScript sync
 
 ## Integration
 
-This generator is automatically configured as a global sync generator in `nx.json`:
+This generator can be configured both globally and on a per-task basis in `nx.json`:
+
+### Global Configuration
+
+Configure it as a global sync generator to run with all sync operations:
 
 ```jsonc
 {
   "sync": {
     "globalGenerators": ["@push-based/zod2nx-schema-nx-plugin:sync-schemas"],
+  },
+}
+```
+
+### Task-Based Configuration
+
+Configure it to run before specific tasks (e.g., build):
+
+```jsonc
+{
+  "targetDefaults": {
+    "build": {
+      "syncGenerators": ["@push-based/zod2nx-schema-nx-plugin:sync-schemas"],
+    },
   },
 }
 ```
