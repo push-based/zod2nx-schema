@@ -158,7 +158,14 @@ describe('nx sync --check global sync-schemas', () => {
 
     expect(stderr).toBe('');
     const cleanedStdout = removeColorCodes(stdout);
-    expect(cleanedStdout).toMatchInlineSnapshot('');
+    expect(cleanedStdout).toMatchInlineSnapshot(`
+      "
+       NX   The workspace is up to date
+
+      There are no sync generators to run.
+
+      "
+    `);
   });
 
   it('should pass when all schemas are in sync', async () => {
