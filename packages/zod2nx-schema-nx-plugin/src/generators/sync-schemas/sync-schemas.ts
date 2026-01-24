@@ -1,10 +1,5 @@
-import {
-  type Tree,
-  createProjectGraphAsync,
-  glob,
-  joinPathFragments,
-  logger,
-} from '@nx/devkit';
+import { type Tree, glob, joinPathFragments, logger } from '@nx/devkit';
+// eslint-disable-next-line import/named
 import { importModule, zod2nxSchema } from '@push-based/zod2nx-schema';
 import * as path from 'node:path';
 import { z } from 'zod';
@@ -26,43 +21,35 @@ type Zod2NxConfig = {
   };
 };
 
-type ProjectConfig = {
-  project: string;
-  root: string;
-  configs: Zod2NxConfig[];
-};
-
 async function loadConfigFile(
-  tree: Tree,
-  path: string,
+  _tree: Tree,
+  filepath: string,
 ): Promise<Zod2NxConfig[]> {
   try {
-    const module = await importModule({ filepath: path, format: 'esm' });
-
-    let value: Zod2NxConfig | Zod2NxConfig[];
-
-    // Handle both direct export and module object with default
-    value =
+    const module = await importModule({ filepath, format: 'esm' });
+    const value: Zod2NxConfig | Zod2NxConfig[] =
       module && typeof module === 'object' && 'default' in module
         ? (module.default as Zod2NxConfig | Zod2NxConfig[])
         : (module as Zod2NxConfig | Zod2NxConfig[]);
 
-    if (value === null || value === undefined) {
-      throw new Error(`Invalid config in ${path}: config is null or undefined`);
+    if (value == null) {
+      throw new Error(
+        `Invalid config in ${filepath}: config is null or undefined`,
+      );
     }
 
     const configs = Array.isArray(value) ? value : [value];
 
-    // Validate that all configs are objects
+    // eslint-disable-next-line functional/no-loop-statements
     for (const [i, config] of configs.entries()) {
-      if (config === null || config === undefined) {
+      if (config == null) {
         throw new Error(
-          `Invalid config at index ${i} in ${path}: config is null or undefined`,
+          `Invalid config at index ${i} in ${filepath}: config is null or undefined`,
         );
       }
       if (typeof config !== 'object') {
         throw new TypeError(
-          `Invalid config at index ${i} in ${path}: expected object but got ${typeof config}`,
+          `Invalid config at index ${i} in ${filepath}: expected object but got ${typeof config}`,
         );
       }
     }
@@ -73,13 +60,9 @@ async function loadConfigFile(
       throw error; // Re-throw our validation errors
     }
     throw new Error(
-      `Failed to load config from ${path}: ${error instanceof Error ? error.message : String(error)}`,
+      `Failed to load config from ${filepath}: ${error instanceof Error ? error.message : String(error)}`,
     );
   }
-}
-
-function resolvePath(root: string, p?: string, fallback?: string) {
-  return joinPathFragments(root, p ?? fallback ?? '');
 }
 
 function jsonEqual(a: unknown, b: unknown): boolean {
@@ -89,12 +72,13 @@ function jsonEqual(a: unknown, b: unknown): boolean {
 /**
  * Generate a schema file for manual sync execution
  */
+// eslint-disable-next-line @typescript-eslint/max-params
 async function generateSchemaFileForSync(
   tree: Tree,
   schemaPath: string,
   outPath: string,
-  exportName: string = 'default',
   loadModuleExportFn: typeof loadModuleExport,
+  exportName: string = 'default',
 ): Promise<void> {
   try {
     // For test environment, try to read from tree first
@@ -150,8 +134,10 @@ export async function loadModuleExport<T = unknown>(
   return exportedValue;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type SyncSchemasGeneratorSchema = {};
 
+// eslint-disable-next-line max-lines-per-function, complexity
 export async function syncSchemasGenerator(
   tree: Tree,
   options: SyncSchemasGeneratorSchema,
@@ -159,8 +145,6 @@ export async function syncSchemasGenerator(
   loadModuleExportFn: typeof loadModuleExport = loadModuleExport,
 ): Promise<void> {
   try {
-    const graph = await createProjectGraphAsync();
-
     // Find all zod2nx-schema.config files in the workspace
     const configFiles = await glob(tree, [`**/${ZOD2NX_SCHEMA_CONFIG_NAME}.*`]);
 
@@ -170,116 +154,108 @@ export async function syncSchemasGenerator(
     }
 
     // Process each config file
+    // eslint-disable-next-line functional/no-loop-statements
     for (const configFile of configFiles) {
-      try {
-        // Skip config files that are not within reasonable package boundaries
-        // This prevents issues with configs from other packages or root level when running in Nx
-        // But allow test configs that use different paths
-        if (
-          configFile.startsWith('e2e/') ||
-          configFile.startsWith('packages/zod2nx-schema/') ||
-          configFile === 'zod2nx-schema.config.ts'
-        ) {
+      // Skip config files that are not within reasonable package boundaries
+      // This prevents issues with configs from other packages or root level when running in Nx
+      // But allow test configs that use different paths
+      if (
+        configFile.startsWith('e2e/') ||
+        configFile.startsWith('packages/zod2nx-schema/') ||
+        configFile === 'zod2nx-schema.config.ts'
+      ) {
+        continue;
+      }
+
+      const configs = await loadConfigFile(tree, configFile);
+
+      // eslint-disable-next-line functional/no-loop-statements
+      for (const config of configs) {
+        // Validate config object
+        if (!config) {
+          throw new Error(
+            `Invalid config found in ${configFile}: config is null or undefined. Please check your zod2nx-schema.config file.`,
+          );
+        }
+
+        if (typeof config !== 'object') {
+          throw new TypeError(
+            `Invalid config found in ${configFile}: expected object but got ${typeof config}. Please check your zod2nx-schema.config file.`,
+          );
+        }
+
+        const schemaPath = config.schema;
+        const outPath = config.outPath;
+
+        if (!schemaPath || !outPath) {
+          logger.warn(
+            `Skipping invalid config in ${configFile}: missing schema or outPath. Config: ${JSON.stringify(config)}`,
+          );
           continue;
         }
 
-        const configs = await loadConfigFile(tree, configFile);
+        // Resolve paths relative to the config file directory
+        const configDir = configFile.slice(
+          0,
+          Math.max(0, configFile.lastIndexOf('/')),
+        );
+        const resolvedSchemaPath = joinPathFragments(configDir, schemaPath);
+        const resolvedOutPath = joinPathFragments(configDir, outPath);
 
-        for (const config of configs) {
-          // Validate config object
-          if (!config) {
-            throw new Error(
-              `Invalid config found in ${configFile}: config is null or undefined. Please check your zod2nx-schema.config file.`,
-            );
-          }
+        // Check sync conditions
+        const schemaExists = tree.exists(resolvedSchemaPath);
+        const jsonExists = tree.exists(resolvedOutPath);
 
-          if (typeof config !== 'object') {
-            throw new TypeError(
-              `Invalid config found in ${configFile}: expected object but got ${typeof config}. Please check your zod2nx-schema.config file.`,
-            );
-          }
-
-          const schemaPath = config.schema;
-          const outPath = config.outPath;
-
-          if (!schemaPath || !outPath) {
-            logger.warn(
-              `Skipping invalid config in ${configFile}: missing schema or outPath. Config: ${JSON.stringify(config)}`,
-            );
-            continue;
-          }
-
-          // Resolve paths relative to the config file directory
-          const configDir = configFile.slice(
-            0,
-            Math.max(0, configFile.lastIndexOf('/')),
+        if (schemaExists && !jsonExists) {
+          // Generate the missing schema file
+          // eslint-disable-next-line n/no-sync
+          await generateSchemaFileForSync(
+            tree,
+            resolvedSchemaPath,
+            resolvedOutPath,
+            loadModuleExportFn,
+            config.exportName,
           );
-          const resolvedSchemaPath = joinPathFragments(configDir, schemaPath);
-          const resolvedOutPath = joinPathFragments(configDir, outPath);
+        } else if (schemaExists && jsonExists) {
+          // Stale: schema.json content doesn't match what would be generated from schema.ts
+          const zodSchema = (await loadModuleExportFn(
+            resolvedSchemaPath,
+            config.exportName,
+          )) as z.ZodTypeAny;
 
-          // Check sync conditions
-          const schemaExists = tree.exists(resolvedSchemaPath);
-          const jsonExists = tree.exists(resolvedOutPath);
+          const expectedJson = zod2nxSchema(zodSchema, {
+            name: 'default',
+            ...config.options,
+          });
+          const actualJson = JSON.parse(
+            tree.read(resolvedOutPath, 'utf8') || '{}',
+          );
 
-          if (schemaExists && !jsonExists) {
-            // Generate the missing schema file
+          // eslint-disable-next-line max-depth
+          if (!jsonEqual(expectedJson, actualJson)) {
+            // eslint-disable-next-line n/no-sync
             await generateSchemaFileForSync(
               tree,
               resolvedSchemaPath,
               resolvedOutPath,
-              config.exportName,
               loadModuleExportFn,
+              config.exportName,
             );
-          } else if (schemaExists && jsonExists) {
-            // Stale: schema.json content doesn't match what would be generated from schema.ts
-            try {
-              const zodSchema = (await loadModuleExportFn(
-                resolvedSchemaPath,
-                config.exportName,
-              )) as z.ZodTypeAny;
-
-              const expectedJson = zod2nxSchema(zodSchema, {
-                name: 'default',
-                ...config.options,
-              });
-              const actualJson = JSON.parse(
-                tree.read(resolvedOutPath, 'utf8') || '{}',
-              );
-
-              if (!jsonEqual(expectedJson, actualJson)) {
-                // Regenerate the stale schema file
-                await generateSchemaFileForSync(
-                  tree,
-                  resolvedSchemaPath,
-                  resolvedOutPath,
-                  config.exportName,
-                  loadModuleExportFn,
-                );
-              }
-            } catch (error) {
-              throw error; // Re-throw in manual mode
-            }
-          } else if (!schemaExists && jsonExists) {
-            // Remove the extra schema file
-            tree.delete(resolvedOutPath);
-            logger.info(`🗑️ Removed extra schema file: ${resolvedOutPath}`);
           }
+        } else if (!schemaExists && jsonExists) {
+          tree.delete(resolvedOutPath);
+          logger.info(`🗑️ Removed extra schema file: ${resolvedOutPath}`);
         }
-      } catch (error) {
-        // Re-throw in manual mode
-        throw error;
       }
     }
-
-    // Check if we're running in sync context by examining the call stack
-    const isSyncContext =
-      new Error().stack?.includes('runSyncGenerator') ?? false;
 
     // In manual mode, we've already fixed the issues, so return success
     return;
   } catch (error) {
     // Re-throw error in manual mode
-    throw error;
+    throw new Error(
+      `Sync schemas failed: ${error instanceof Error ? error.message : String(error)}`,
+    );
   }
 }
 

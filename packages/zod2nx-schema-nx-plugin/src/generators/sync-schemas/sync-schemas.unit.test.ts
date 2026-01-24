@@ -1,6 +1,7 @@
 import * as devKit from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { toProjectGraph } from '@push-based/test-utils';
+// eslint-disable-next-line import/named
 import { importModule } from '@push-based/zod2nx-schema';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
@@ -91,7 +92,7 @@ describe('syncSchemasGenerator', () => {
 
   it('should return void when no issues found', async () => {
     (importModule as any).mockResolvedValueOnce({
-      default: require('zod').z.object({}),
+      default: z.object({}),
     });
 
     const result = await syncSchemasGenerator(tree, {});
@@ -154,7 +155,7 @@ describe('syncSchemasGenerator', () => {
       })
       .mockRejectedValueOnce(new Error('Invalid schema syntax')); // schema file
 
-    await expect(syncSchemasGenerator(tree, {})).rejects.toThrowError(
+    await expect(syncSchemasGenerator(tree, {})).rejects.toThrow(
       'Invalid schema syntax',
     );
   });
@@ -172,7 +173,7 @@ describe('syncSchemasGenerator', () => {
       new Error('Project graph error'),
     );
 
-    await expect(syncSchemasGenerator(tree, {})).rejects.toThrowError(
+    await expect(syncSchemasGenerator(tree, {})).rejects.toThrow(
       'Project graph error',
     );
   });

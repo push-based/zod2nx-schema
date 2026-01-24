@@ -62,7 +62,7 @@ describe('zod2nx-schema-nx-plugin g configuration', () => {
         path.join(cwd, 'libs', project, 'zod2nx-schema.config.ts'),
         'utf8',
       ),
-    ).resolves.not.toThrowError();
+    ).resolves.not.toThrow();
   });
 
   it('should NOT create a zod2nx-schema.config.ts file if one already exists', async () => {
@@ -131,7 +131,7 @@ describe('zod2nx-schema-nx-plugin g configuration', () => {
         path.join(cwd, 'libs', project, 'zod2nx-schema.config.ts'),
         'utf8',
       ),
-    ).rejects.toThrowError('no such file or directory');
+    ).rejects.toThrow('no such file or directory');
   });
 
   it('should inform about dry run', async () => {
@@ -187,7 +187,7 @@ describe('zod2nx-schema-nx-plugin g configuration', () => {
         path.join(cwd, 'libs', project, 'zod2nx-schema.config.ts'),
         'utf8',
       ),
-    ).resolves.not.toThrowError();
+    ).resolves.not.toThrow();
     const projectJson = await readFile(
       path.join(cwd, 'libs', project, 'project.json'),
       'utf8',

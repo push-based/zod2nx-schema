@@ -43,7 +43,7 @@ describe('validate', () => {
       .meta({ title: 'User' });
 
     expect(() => validate(userSchema, { name: '', dateOfBirth: 'Jul 1, 1980' }))
-      .toThrowError(`Invalid ${ansis.bold('User')}
+      .toThrow(`Invalid ${ansis.bold('User')}
 ✖ Too small: expected string to have >=1 characters
   → at name
 ✖ Invalid input: expected string, received undefined
@@ -62,7 +62,7 @@ describe('validate', () => {
       )
       .meta({ title: 'ProjectName' });
 
-    expect(() => validate(projectNameSchema, undefined)).toThrowError(
+    expect(() => validate(projectNameSchema, undefined)).toThrow(
       'Encountered Promise during synchronous parse. Use .parseAsync() instead.',
     );
   });
@@ -117,9 +117,7 @@ describe('validateAsync', () => {
       )
       .meta({ title: 'FilePath' });
 
-    await expect(
-      validateAsync(filePathSchema, 'package.json'),
-    ).rejects.toThrowError(
+    await expect(validateAsync(filePathSchema, 'package.json')).rejects.toThrow(
       `Invalid ${ansis.bold('FilePath')}\n✖ File does not exist`,
     );
   });

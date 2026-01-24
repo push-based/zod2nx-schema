@@ -14,7 +14,8 @@ import type { ConfigGeneratorOptions } from './schema.js';
 
 const CONFIG_FILE_NAME = `${ZOD2NX_SCHEMA_CONFIG_NAME}.ts`;
 
-function registerSyncGeneratorLocallyFn(
+// eslint-disable-next-line max-lines-per-function
+export function registerSyncGeneratorLocallyFn(
   tree: Tree,
   projectConfig: ProjectConfiguration,
   taskName?: string,
@@ -32,8 +33,7 @@ function registerSyncGeneratorLocallyFn(
   const projectJsonPath = path.join(projectConfig.root, 'project.json');
 
   if (tree.exists(projectJsonPath)) {
-    // Update project.json
-    updateProjectConfiguration(tree, projectConfig.name!, {
+    updateProjectConfiguration(tree, projectConfig.name ?? '', {
       ...projectConfig,
       targets: {
         ...projectConfig.targets,
@@ -47,7 +47,6 @@ function registerSyncGeneratorLocallyFn(
       },
     });
   } else {
-    // Update package.json for inferred targets
     const packageJsonPath = path.join(projectConfig.root, 'package.json');
     if (tree.exists(packageJsonPath)) {
       updateJson(
