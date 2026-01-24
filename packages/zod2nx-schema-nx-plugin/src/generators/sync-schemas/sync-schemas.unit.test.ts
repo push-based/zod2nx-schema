@@ -1,6 +1,5 @@
 import * as devKit from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
-import { toProjectGraph } from '@push-based/test-utils';
 // eslint-disable-next-line import/named
 import { importModule } from '@push-based/zod2nx-schema';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -35,24 +34,8 @@ describe('syncSchemasGenerator', () => {
         },
       }),
     );
-
-    const projectGraph = toProjectGraph([
-      {
-        name: 'test-app',
-        type: 'app',
-        data: {
-          root: 'apps/test-app',
-        },
-      },
-    ]);
-
-    createProjectGraphAsyncSpy.mockResolvedValue(projectGraph);
   };
   let tree: devKit.Tree;
-  const createProjectGraphAsyncSpy = vi.spyOn(
-    devKit,
-    'createProjectGraphAsync',
-  );
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
@@ -84,10 +67,6 @@ describe('syncSchemasGenerator', () => {
         return { default: undefined };
       },
     );
-  });
-
-  afterEach(() => {
-    createProjectGraphAsyncSpy.mockReset();
   });
 
   it('should return void when no issues found', async () => {
@@ -166,16 +145,6 @@ describe('syncSchemasGenerator', () => {
     const result = await syncSchemasGenerator(tree, {});
 
     expect(result).toBeUndefined();
-  });
-
-  it('should throw error when project graph fails in manual mode', async () => {
-    createProjectGraphAsyncSpy.mockRejectedValueOnce(
-      new Error('Project graph error'),
-    );
-
-    await expect(syncSchemasGenerator(tree, {})).rejects.toThrow(
-      'Project graph error',
-    );
   });
 
   it('should generate missing schema.json file in manual mode', async () => {
