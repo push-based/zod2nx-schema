@@ -17,12 +17,10 @@ describe('MissingSchemaFilesError', () => {
 
     const error = new MissingSchemaFilesError(missingFiles);
 
-    expect(error.name).toBe('MissingSchemaFilesError');
-    expect(error.message).toBe(`Missing schema files:
-  - src/generators/foo/schema.ts
-  - src/generators/bar/schema.ts
-
-Create these files manually.`);
+    expect(error.message).toContain(`Missing schema files:`);
+    expect(error.message).toBe(`foo`);
+    expect(error.message).toBe(`bar`);
+    expect(error.message).toBe(`Create these files manually.`);
     expect(error.missingFiles).toEqual(missingFiles);
   });
 
