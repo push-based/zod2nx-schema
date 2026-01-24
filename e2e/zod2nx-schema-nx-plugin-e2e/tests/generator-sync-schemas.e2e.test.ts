@@ -213,7 +213,6 @@ describe('nx sync --check project sync-schemas', () => {
     const uiLibPath = path.join(cwd, 'libs', project);
     await fs.mkdir(path.join(uiLibPath, 'src'), { recursive: true });
 
-
     /*
     const schemaJsonPath = path.join(uiLibPath, 'src', 'schema.json');
     await fs.writeFile(
