@@ -18,9 +18,9 @@ describe('MissingSchemaFilesError', () => {
     const error = new MissingSchemaFilesError(missingFiles);
 
     expect(error.message).toContain(`Missing schema files:`);
-    expect(error.message).toBe(`foo`);
-    expect(error.message).toBe(`bar`);
-    expect(error.message).toBe(`Create these files manually.`);
+    expect(error.message).toContain(`foo`);
+    expect(error.message).toContain(`bar`);
+    expect(error.message).toContain(`Create these files manually.`);
     expect(error.missingFiles).toEqual(missingFiles);
   });
 
@@ -39,8 +39,8 @@ describe('MissingSchemaFilesError', () => {
 
     const error = new MissingSchemaFilesError(missingFiles);
     expect(error.message).toContain(`Missing schema files:`);
-    expect(error.message).toBe(`schema.ts`);
-    expect(error.message).toBe(`Create these files manually.`);
+    expect(error.message).toContain(`schema.ts`);
+    expect(error.message).toContain(`Create these files manually.`);
   });
 });
 

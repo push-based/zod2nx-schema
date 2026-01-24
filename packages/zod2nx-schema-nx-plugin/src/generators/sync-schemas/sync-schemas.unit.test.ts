@@ -40,7 +40,6 @@ describe('syncSchemasGenerator', () => {
     tree = createTreeWithEmptyWorkspace();
     setupPluginProject();
 
-    // Default mock implementation
     (importModule as any).mockImplementation(
       async (options: { filepath: string }) => {
         const filepath = options.filepath;
