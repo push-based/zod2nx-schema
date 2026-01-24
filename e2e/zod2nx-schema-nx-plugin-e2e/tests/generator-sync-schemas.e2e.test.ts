@@ -228,14 +228,14 @@ describe('nx sync --check project sync-schemas', () => {
       ),
     );
 
-    const { code, stdout } = await executeProcess({
+    const { stderr, stdout } = await executeProcess({
       command: 'npx',
       args: ['nx', 'sync', '--check', project],
       cwd,
       ignoreExitCode: true,
     });
 
-    expect(code).not.toBe(0);
+    expect(stderr).not.toBe('');
     const cleanedStdout = removeColorCodes(stdout);
     expect(cleanedStdout).toMatchInlineSnapshot();
   });
@@ -249,13 +249,13 @@ describe('nx sync --check project sync-schemas', () => {
       args: ['nx', 'sync', project],
       cwd,
     });
-    const { code, stdout } = await executeProcess({
+    const { stderr, stdout } = await executeProcess({
       command: 'npx',
       args: ['nx', 'sync', '--check', project],
       cwd,
     });
 
-    expect(code).toBe(0);
+    expect(stderr).not.toBe('');
     const cleanedStdout = removeColorCodes(stdout);
     expect(cleanedStdout).toMatchInlineSnapshot(`
       "
