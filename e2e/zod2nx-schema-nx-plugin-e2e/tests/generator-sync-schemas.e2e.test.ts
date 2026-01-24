@@ -158,7 +158,7 @@ describe('nx sync --check global sync-schemas', () => {
 
     expect(code).not.toBe(0);
     const cleanedStdout = removeColorCodes(stdout);
-    expect(cleanedStdout).toMatchInlineSnapshot();
+    expect(cleanedStdout).toMatchInlineSnapshot('');
   });
 
   it('should pass when all schemas are in sync', async () => {
@@ -237,7 +237,7 @@ describe('nx sync --check project sync-schemas', () => {
 
     expect(stderr).toBe('');
     const cleanedStdout = removeColorCodes(stdout);
-    expect(cleanedStdout).toMatchInlineSnapshot();
+    expect(cleanedStdout).toMatchInlineSnapshot('');
   });
 
   it('should pass when project schemas are in sync', async () => {
