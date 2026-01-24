@@ -97,8 +97,7 @@ export async function configurationGenerator(
   const projectConfig = readProjectConfiguration(tree, options.project);
   const projectRoot = projectConfig.root;
 
-  const { skipConfig, skipFormat, registerSyncGenerator, taskName } =
-    options;
+  const { skipConfig, skipFormat, registerSyncGenerator, taskName } = options;
 
   if (skipConfig === true) {
     logger.info('Skip config file creation');

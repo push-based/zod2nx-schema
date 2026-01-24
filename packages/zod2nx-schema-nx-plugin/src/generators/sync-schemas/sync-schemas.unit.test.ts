@@ -6,10 +6,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { syncSchemasGenerator } from './sync-schemas.js';
 
-
-vi.mock('@push-based/zod2nx-schema', async (original) => ({
-  ...(await original()) as object,
-  importModule: vi.fn()
+vi.mock('@push-based/zod2nx-schema', async original => ({
+  ...((await original()) as object),
+  importModule: vi.fn(),
 }));
 
 describe('syncSchemasGenerator', () => {
@@ -195,7 +194,7 @@ describe('syncSchemasGenerator', () => {
     expect(tree.exists('apps/test-app/src/schema.json')).toBe(true);
     const generatedContent = tree.read('apps/test-app/src/schema.json', 'utf8');
     const parsedContent = JSON.parse(generatedContent || '{}');
-     expect(parsedContent).toStrictEqual({
+    expect(parsedContent).toStrictEqual({
       $schema: 'https://json-schema.org/draft/2020-12/schema',
       type: 'object',
       properties: {

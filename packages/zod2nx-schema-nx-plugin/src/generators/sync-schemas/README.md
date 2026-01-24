@@ -79,7 +79,6 @@ nx g @push-based/zod2nx-schema-nx-plugin:sync-schemas
 [@push-based/zod2nx-schema-nx-plugin:sync-schemas]: All files are up to date.
 ```
 
-
 ## Technical Details
 
 - Uses dynamic imports to avoid circular dependencies during sync operations

@@ -189,7 +189,7 @@ describe('nx sync --check global sync-schemas', () => {
       "
     `);
   });
-})
+});
 
 describe('nx sync --check project sync-schemas', () => {
   const project = 'ui';
@@ -266,4 +266,4 @@ describe('nx sync --check project sync-schemas', () => {
       "
     `);
   });
-})
+});
