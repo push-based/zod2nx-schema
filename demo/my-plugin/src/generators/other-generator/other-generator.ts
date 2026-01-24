@@ -5,7 +5,7 @@ import {
   generateFiles,
 } from '@nx/devkit';
 import * as path from 'path';
-import { OtherGeneratorGeneratorSchema } from './schema';
+import { OtherGeneratorGeneratorSchema } from './schema.d.js';
 
 export async function otherGeneratorGenerator(
   tree: Tree,
