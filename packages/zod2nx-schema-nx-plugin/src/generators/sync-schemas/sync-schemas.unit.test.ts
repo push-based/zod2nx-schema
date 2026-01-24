@@ -1,6 +1,5 @@
 import type { Tree } from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
-// eslint-disable-next-line import/named
 import { importModule } from '@push-based/zod2nx-schema';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';

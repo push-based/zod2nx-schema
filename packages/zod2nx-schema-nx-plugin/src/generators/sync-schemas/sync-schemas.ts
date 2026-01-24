@@ -1,5 +1,4 @@
 import { type Tree, glob, joinPathFragments, logger } from '@nx/devkit';
-// eslint-disable-next-line import/named
 import { importModule, zod2nxSchema } from '@push-based/zod2nx-schema';
 import * as path from 'node:path';
 import { z } from 'zod';
