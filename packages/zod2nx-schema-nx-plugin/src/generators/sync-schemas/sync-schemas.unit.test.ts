@@ -1,8 +1,8 @@
-import * as devKit from '@nx/devkit';
+import type { Tree } from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 // eslint-disable-next-line import/named
 import { importModule } from '@push-based/zod2nx-schema';
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { syncSchemasGenerator } from './sync-schemas.js';
 
@@ -35,7 +35,7 @@ describe('syncSchemasGenerator', () => {
       }),
     );
   };
-  let tree: devKit.Tree;
+  let tree: Tree;
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
@@ -110,7 +110,6 @@ describe('syncSchemasGenerator', () => {
     expect(tree.exists('apps/test-app/src/schema.ts')).toBe(true);
     expect(tree.exists('apps/test-app/src/schema.json')).toBe(true);
 
-    // Write different JSON content to make it stale
     tree.write(
       'apps/test-app/src/schema.json',
       '{"type": "object", "properties": { "age": { "type": "number" } }}',
@@ -185,8 +184,6 @@ describe('syncSchemasGenerator', () => {
       schemaExists: true,
       jsonExists: true,
     });
-
-    // Make the schema.json stale by writing different content
     const staleContent = {
       type: 'object',
       properties: { age: { type: 'number' } },
@@ -195,8 +192,6 @@ describe('syncSchemasGenerator', () => {
       'apps/test-app/src/schema.json',
       JSON.stringify(staleContent, null, 2),
     );
-
-    // Verify it's actually stale (different from what should be generated)
     const currentContent = JSON.parse(
       tree.read('apps/test-app/src/schema.json', 'utf8') || '{}',
     );
@@ -204,23 +199,17 @@ describe('syncSchemasGenerator', () => {
       age: { type: 'number' },
     });
 
-    // Call generator in manual mode (should regenerate the stale file)
     const result = await syncSchemasGenerator(tree, {});
 
-    // Should return void (no sync issues)
     expect(result).toBeUndefined();
-
-    // Verify the schema.json file was regenerated using tree.write
     expect(tree.exists('apps/test-app/src/schema.json')).toBe(true);
 
-    // Verify the content was updated to match the schema.ts (test environment uses z.toJSONSchema)
     const regeneratedContent = tree.read(
       'apps/test-app/src/schema.json',
       'utf8',
     );
     const parsedContent = JSON.parse(regeneratedContent || '{}');
 
-    // In test environment, it uses z.toJSONSchema which produces complete JSON schema
     expect(parsedContent).toStrictEqual({
       $schema: 'https://json-schema.org/draft/2020-12/schema',
       type: 'object',
@@ -233,7 +222,6 @@ describe('syncSchemasGenerator', () => {
   });
 
   it('should remove extra schema.json file in manual mode', async () => {
-    // Verify test setup is correct
     expect({
       configExists: tree.exists('apps/test-app/zod2nx-schema.config.ts'),
       jsonExists: tree.exists('apps/test-app/src/schema.json'),
@@ -242,7 +230,6 @@ describe('syncSchemasGenerator', () => {
       jsonExists: true,
     });
 
-    // Remove schema.ts file to simulate it no longer existing
     tree.delete('apps/test-app/src/schema.ts');
     expect({
       schemaExists: tree.exists('apps/test-app/src/schema.ts'),

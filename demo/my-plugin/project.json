@@ -1,0 +1,41 @@
+{
+  "name": "my-plugin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "demo/my-plugin/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/demo/my-plugin",
+        "main": "demo/my-plugin/src/index.ts",
+        "tsConfig": "demo/my-plugin/tsconfig.lib.json",
+        "assets": [
+          "demo/my-plugin/*.md",
+          {
+            "input": "./demo/my-plugin/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./demo/my-plugin/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./demo/my-plugin",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./demo/my-plugin",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    }
+  }
+}

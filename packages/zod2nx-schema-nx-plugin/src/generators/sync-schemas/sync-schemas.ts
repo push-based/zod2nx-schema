@@ -201,13 +201,10 @@ export async function syncSchemasGenerator(
         );
         const resolvedSchemaPath = joinPathFragments(configDir, schemaPath);
         const resolvedOutPath = joinPathFragments(configDir, outPath);
-
-        // Check sync conditions
         const schemaExists = tree.exists(resolvedSchemaPath);
         const jsonExists = tree.exists(resolvedOutPath);
 
         if (schemaExists && !jsonExists) {
-          // Generate the missing schema file
           // eslint-disable-next-line n/no-sync
           await generateSchemaFileForSync(
             tree,

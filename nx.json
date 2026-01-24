@@ -126,6 +126,11 @@
         "packageRoot": "{projectRoot}/dist",
         "registry": "https://registry.npmjs.org/"
       }
+    },
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "workspaceLayout": {
