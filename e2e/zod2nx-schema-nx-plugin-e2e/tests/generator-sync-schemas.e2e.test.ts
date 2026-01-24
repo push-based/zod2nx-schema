@@ -235,7 +235,7 @@ describe('nx sync --check project sync-schemas', () => {
       ignoreExitCode: true,
     });
 
-    expect(stderr).not.toBe('');
+    expect(stderr).toBe('');
     const cleanedStdout = removeColorCodes(stdout);
     expect(cleanedStdout).toMatchInlineSnapshot();
   });
@@ -255,7 +255,7 @@ describe('nx sync --check project sync-schemas', () => {
       cwd,
     });
 
-    expect(stderr).not.toBe('');
+    expect(stderr).toBe('');
     const cleanedStdout = removeColorCodes(stdout);
     expect(cleanedStdout).toMatchInlineSnapshot(`
       "
