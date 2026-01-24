@@ -172,13 +172,13 @@ describe('nx sync --check global sync-schemas', () => {
       cwd,
     });
 
-    const { code, stdout } = await executeProcess({
+    const { stderr, stdout } = await executeProcess({
       command: 'npx',
       args: ['nx', 'sync', '--check'],
       cwd,
     });
 
-    expect(code).toBe(0);
+    expect(stderr).toBe('');
     const cleanedStdout = removeColorCodes(stdout);
     expect(cleanedStdout).toMatchInlineSnapshot(`
       "
