@@ -40,11 +40,9 @@ Create these files manually.`);
     const missingFiles = [path.join(cwd, 'src/schema.ts')];
 
     const error = new MissingSchemaFilesError(missingFiles);
-
-    expect(error.message).toBe(`Missing schema files:
-  - src/schema.ts
-
-Create these files manually.`);
+    expect(error.message).toContain(`Missing schema files:`);
+    expect(error.message).toBe(`schema.ts`);
+    expect(error.message).toBe(`Create these files manually.`);
   });
 });
 
