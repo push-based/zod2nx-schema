@@ -1,6 +1,6 @@
 # Sync Schemas Generator
 
-This generator automatically detects when schema.json files are out of sync with their Zod definitions and reports the issues.
+This generator automatically keeps schema.json files in sync with their Zod definitions.
 
 ## Overview
 
@@ -17,7 +17,7 @@ The sync schemas generator follows the same mental model as Nx's TypeScript sync
 
 1. **Discovery**: Scans all Nx projects for `zod2nx-schema.config.*` files
 2. **Validation**: For each schema configuration entry, checks if files are in sync
-3. **Reporting**: Returns detailed information about out-of-sync files
+3. **Sync**: Automatically fixes any out-of-sync files
 
 ## Integration
 
@@ -79,17 +79,6 @@ nx g @push-based/zod2nx-schema-nx-plugin:sync-schemas
 [@push-based/zod2nx-schema-nx-plugin:sync-schemas]: All files are up to date.
 ```
 
-### Issues Found
-
-```
- NX   The workspace is out of sync
-
-Schema files are out of sync:
-  - 2 missing schema.json file(s) (schema.ts exists but schema.json doesn't)
-  - 1 stale schema.json file(s) (content doesn't match schema.ts)
-
-Run "nx sync" to fix these issues.
-```
 
 ## Technical Details
 

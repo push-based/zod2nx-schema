@@ -7,7 +7,6 @@ import {
 } from '@nx/devkit';
 import { importModule, zod2nxSchema } from '@push-based/zod2nx-schema';
 import * as path from 'node:path';
-import type { SyncGeneratorResult } from 'nx/src/utils/sync-generators';
 import { z } from 'zod';
 
 // Inline constants and utilities to avoid import issues during sync
@@ -158,10 +157,9 @@ export async function syncSchemasGenerator(
   options: SyncSchemasGeneratorSchema,
   // For testing: allow injecting a custom module loader
   loadModuleExportFn: typeof loadModuleExport = loadModuleExport,
-): Promise<SyncGeneratorResult | (() => never) | void> {
+): Promise<void> {
   try {
     const graph = await createProjectGraphAsync();
-    const issues: string[] = [];
 
     // Find all zod2nx-schema.config files in the workspace
     const configFiles = await glob(tree, [`**/${ZOD2NX_SCHEMA_CONFIG_NAME}.*`]);
@@ -223,26 +221,15 @@ export async function syncSchemasGenerator(
           const schemaExists = tree.exists(resolvedSchemaPath);
           const jsonExists = tree.exists(resolvedOutPath);
 
-          // Check if we're running in sync context by examining the call stack
-          const isSyncContext =
-            new Error().stack?.includes('runSyncGenerator') ?? false;
-
           if (schemaExists && !jsonExists) {
-            // Missing: schema.ts exists but schema.json doesn't
-            if (isSyncContext) {
-              issues.push(
-                `Missing schema.json file: ${resolvedOutPath} (schema.ts exists)`,
-              );
-            } else {
-              // Generate the missing schema file
-              await generateSchemaFileForSync(
-                tree,
-                resolvedSchemaPath,
-                resolvedOutPath,
-                config.exportName,
-                loadModuleExportFn,
-              );
-            }
+            // Generate the missing schema file
+            await generateSchemaFileForSync(
+              tree,
+              resolvedSchemaPath,
+              resolvedOutPath,
+              config.exportName,
+              loadModuleExportFn,
+            );
           } else if (schemaExists && jsonExists) {
             // Stale: schema.json content doesn't match what would be generated from schema.ts
             try {
@@ -260,53 +247,27 @@ export async function syncSchemasGenerator(
               );
 
               if (!jsonEqual(expectedJson, actualJson)) {
-                if (isSyncContext) {
-                  issues.push(
-                    `Stale schema.json file: ${resolvedOutPath} (content doesn't match schema.ts)`,
-                  );
-                } else {
-                  // Regenerate the stale schema file
-                  await generateSchemaFileForSync(
-                    tree,
-                    resolvedSchemaPath,
-                    resolvedOutPath,
-                    config.exportName,
-                    loadModuleExportFn,
-                  );
-                }
+                // Regenerate the stale schema file
+                await generateSchemaFileForSync(
+                  tree,
+                  resolvedSchemaPath,
+                  resolvedOutPath,
+                  config.exportName,
+                  loadModuleExportFn,
+                );
               }
             } catch (error) {
-              if (isSyncContext) {
-                issues.push(
-                  `Error processing schema files: ${resolvedSchemaPath} - ${error}`,
-                );
-              } else {
-                throw error; // Re-throw in manual mode
-              }
+              throw error; // Re-throw in manual mode
             }
           } else if (!schemaExists && jsonExists) {
-            // Extra: schema.json exists but schema.ts doesn't
-            if (isSyncContext) {
-              issues.push(
-                `Extra schema.json file: ${resolvedOutPath} (schema.ts no longer exists)`,
-              );
-            } else {
-              // Remove the extra schema file
-              tree.delete(resolvedOutPath);
-              logger.info(`🗑️ Removed extra schema file: ${resolvedOutPath}`);
-            }
+            // Remove the extra schema file
+            tree.delete(resolvedOutPath);
+            logger.info(`🗑️ Removed extra schema file: ${resolvedOutPath}`);
           }
         }
       } catch (error) {
-        // Check if we're running in sync context
-        const isSyncContext =
-          new Error().stack?.includes('runSyncGenerator') ?? false;
-        if (isSyncContext) {
-          logger.warn(`Failed to process config file ${configFile}: ${error}`);
-        } else {
-          // Re-throw in manual mode
-          throw error;
-        }
+        // Re-throw in manual mode
+        throw error;
       }
     }
 
@@ -314,40 +275,11 @@ export async function syncSchemasGenerator(
     const isSyncContext =
       new Error().stack?.includes('runSyncGenerator') ?? false;
 
-    // Return result based on issues
-    if (issues.length > 0) {
-      if (isSyncContext) {
-        // Return SyncGeneratorResult for sync execution
-        const message = `Zod schemas are out of sync\n${issues.map(i => `- ${i}`).join('\n')}`;
-        tree.write('.out-of-sync.txt', `${message}\n`);
-        return {
-          outOfSyncMessage: message,
-          outOfSyncDetails: issues,
-        };
-      } else {
-        // In manual mode, we've already fixed the issues, so return success
-        return;
-      }
-    }
-
-    // Return void when in sync
+    // In manual mode, we've already fixed the issues, so return success
     return;
   } catch (error) {
-    // Check if we're running in sync context
-    const isSyncContext =
-      new Error().stack?.includes('runSyncGenerator') ?? false;
-
-    if (isSyncContext) {
-      const message = `Sync generator failed: ${error}`;
-      tree.write('.out-of-sync.txt', `${message}\n`);
-      return {
-        outOfSyncMessage: message,
-        outOfSyncDetails: [String(error)],
-      };
-    } else {
-      // Re-throw error in manual mode
-      throw error;
-    }
+    // Re-throw error in manual mode
+    throw error;
   }
 }
 

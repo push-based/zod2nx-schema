@@ -28,8 +28,8 @@ export const configGeneratorOptionsSchema = z.object({
     default: false,
   }),
 
-  registerSyncGeneratorLocally: z.boolean().meta({
-    describe: 'Register the sync generator locally for a specific task',
+  registerSyncGenerator: z.boolean().meta({
+    describe: 'Register the sync generator for a specific task',
     default: false,
   }),
 

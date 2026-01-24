@@ -97,7 +97,7 @@ export async function configurationGenerator(
   const projectConfig = readProjectConfiguration(tree, options.project);
   const projectRoot = projectConfig.root;
 
-  const { skipConfig, skipFormat, registerSyncGeneratorLocally, taskName } =
+  const { skipConfig, skipFormat, registerSyncGenerator, taskName } =
     options;
 
   if (skipConfig === true) {
@@ -114,7 +114,7 @@ export async function configurationGenerator(
     }
   }
 
-  if (registerSyncGeneratorLocally) {
+  if (registerSyncGenerator) {
     registerSyncGeneratorLocallyFn(tree, projectConfig, taskName);
   }
 

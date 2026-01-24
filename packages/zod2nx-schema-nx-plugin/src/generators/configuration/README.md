@@ -32,5 +32,5 @@ Show what will be generated without writing to disk:
 | **--bin**                          | `string`                  | Path to zod2nx-schema CLI                                            |
 | **--skipConfig**                   | `boolean` (DEFAULT false) | Skip adding the `zod2nx-schema.config.ts` to project root.           |
 | **--skipFormat**                   | `boolean` (DEFAULT false) | Skip formatting of changed files                                     |
-| **--registerSyncGeneratorLocally** | `boolean` (DEFAULT false) | Register the sync generator locally for a specific task              |
+| **--registerSyncGenerator** | `boolean` (DEFAULT false) | Register the sync generator for a specific task              |
 | **--taskName**                     | `string`                  | The task name to register the sync generator for (e.g., build, lint) |

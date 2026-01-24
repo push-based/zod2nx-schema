@@ -39,7 +39,6 @@ describe('zod2nx-schema-nx-plugin g configuration', () => {
         'g',
         '@push-based/zod2nx-schema-nx-plugin:configuration',
         project,
-        '--targetName=zod2nx-schema',
       ],
       cwd,
     });
@@ -155,6 +154,48 @@ describe('zod2nx-schema-nx-plugin g configuration', () => {
     const cleanedStderr = removeColorCodes(stderr);
     expect(cleanedStderr).toContain(
       'NOTE: The "dryRun" flag means no changes were made.',
+    );
+  });
+
+  it('should support registering sync generator locally', async () => {
+    const cwd = path.join(testFileDir, 'configure-with-sync');
+    const mockDir = path.join(import.meta.dirname, '../mocks/nx-monorepo');
+    await setupTestWorkspace(mockDir, cwd);
+
+    const { code, stdout } = await executeProcess({
+      command: 'npx',
+      args: [
+        'nx',
+        'g',
+        '@push-based/zod2nx-schema-nx-plugin:configuration',
+        project,
+        '--registerSyncGenerator',
+        '--taskName=build',
+      ],
+      cwd,
+    });
+
+    expect(code).toBe(0);
+
+    const cleanedStdout = removeColorCodes(stdout);
+    expect(cleanedStdout).toContain(
+      'NX  Generating @push-based/zod2nx-schema-nx-plugin:configuration',
+    );
+
+    await expect(
+      readFile(
+        path.join(cwd, 'libs', project, 'zod2nx-schema.config.ts'),
+        'utf8',
+      ),
+    ).resolves.not.toThrowError();
+    const projectJson = await readFile(
+      path.join(cwd, 'libs', project, 'project.json'),
+      'utf8',
+    );
+
+    const projectConfig = JSON.parse(projectJson);
+    expect(projectConfig.targets?.build?.syncGenerators).toContain(
+      '@push-based/zod2nx-schema-nx-plugin:sync-schemas',
     );
   });
 });

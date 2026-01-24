@@ -62,7 +62,7 @@ describe('configurationGenerator', () => {
 
     await configurationGenerator(tree, {
       project: testProjectName,
-      registerSyncGeneratorLocally: true,
+      registerSyncGenerator: true,
       taskName: 'build',
     });
 
@@ -92,7 +92,7 @@ describe('configurationGenerator', () => {
 
     await configurationGenerator(tree, {
       project: testProjectName,
-      registerSyncGeneratorLocally: true,
+      registerSyncGenerator: true,
       taskName: 'build',
     });
 
