@@ -142,4 +142,58 @@ describe('nx-plugin g init', () => {
       }),
     );
   });
+
+  it('should work with configuration generator in sequence', async () => {
+    const cwd = path.join(testFileDir, 'init-then-configure');
+    const mockDir = path.join(import.meta.dirname, '../mocks/nx-monorepo');
+    await setupTestWorkspace(mockDir, cwd);
+
+    const initResult = await executeProcess({
+      command: 'npx',
+      args: [
+        'nx',
+        'g',
+        '@push-based/zod2nx-schema-nx-plugin:init',
+        project,
+        '--skipInstall',
+      ],
+      cwd,
+    });
+
+    expect(initResult.code).toBe(0);
+    expect(removeColorCodes(initResult.stdout)).toContain(
+      'NX  Generating @push-based/zod2nx-schema-nx-plugin:init',
+    );
+    const configResult = await executeProcess({
+      command: 'npx',
+      args: [
+        'nx',
+        'g',
+        '@push-based/zod2nx-schema-nx-plugin:configuration',
+        project,
+      ],
+      cwd,
+    });
+
+    expect(configResult.code).toBe(0);
+    expect(removeColorCodes(configResult.stdout)).toContain(
+      'NX  Generating @push-based/zod2nx-schema-nx-plugin:configuration',
+    );
+    const packageJson = await readFile(path.join(cwd, 'package.json'), 'utf8');
+    const configFile = await readFile(
+      path.join(cwd, 'libs', project, 'zod2nx-schema.config.ts'),
+      'utf8',
+    );
+
+    expect(JSON.parse(packageJson)).toStrictEqual(
+      expect.objectContaining({
+        devDependencies: expect.objectContaining({
+          '@push-based/zod2nx-schema-nx-plugin': expect.any(String),
+          '@push-based/zod2nx-schema': expect.any(String),
+        }),
+      }),
+    );
+
+    expect(configFile).toContain('export default');
+  });
 });

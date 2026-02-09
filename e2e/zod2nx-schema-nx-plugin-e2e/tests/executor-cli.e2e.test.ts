@@ -48,10 +48,6 @@ describe('nx plugin executor - cli', () => {
       });
   });
 
-  // afterEach(async () => {
-  //   await teardownTestFolder(testFileDir);
-  // });
-
   afterAll(() => {
     Object.entries(processEnvCP).forEach(([k, v]) => {
       // eslint-disable-next-line functional/immutable-data

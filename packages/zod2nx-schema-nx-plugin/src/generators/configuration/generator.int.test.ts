@@ -47,4 +47,84 @@ describe('configurationGenerator', () => {
     });
     expect(loggerInfoSpy).toHaveBeenCalledWith('Skip formatting files');
   });
+
+  it('should register sync generator locally in project.json', async () => {
+    // Create project.json
+    tree.write(
+      path.join(testProjectRoot, 'project.json'),
+      JSON.stringify({
+        name: testProjectName,
+        targets: {
+          build: {},
+        },
+      }),
+    );
+
+    await configurationGenerator(tree, {
+      project: testProjectName,
+      registerSyncGenerator: true,
+      taskName: 'build',
+    });
+
+    const projectConfig = readProjectConfiguration(tree, testProjectName);
+    expect(projectConfig.targets?.build?.syncGenerators).toContain(
+      '@push-based/zod2nx-schema-nx-plugin:sync-schemas',
+    );
+  });
+
+  it('should register sync generator locally in package.json for inferred targets', async () => {
+    // For inferred targets, we need to create a project without project.json
+    // First, delete the project.json that was created by addProjectConfiguration
+    tree.delete(path.join(testProjectRoot, 'project.json'));
+
+    // Create package.json with nx configuration for inferred targets
+    tree.write(
+      path.join(testProjectRoot, 'package.json'),
+      JSON.stringify({
+        name: testProjectName,
+        nx: {
+          targets: {
+            build: {},
+          },
+        },
+      }),
+    );
+
+    await configurationGenerator(tree, {
+      project: testProjectName,
+      registerSyncGenerator: true,
+      taskName: 'build',
+    });
+
+    const packageJson = JSON.parse(
+      tree.read(path.join(testProjectRoot, 'package.json'))!.toString(),
+    );
+    expect(packageJson.nx).toBeDefined();
+    expect(packageJson.nx.targets).toBeDefined();
+    expect(packageJson.nx.targets.build.syncGenerators).toContain(
+      '@push-based/zod2nx-schema-nx-plugin:sync-schemas',
+    );
+  });
+
+  it('should not register sync generator when option is false', async () => {
+    // Create project.json
+    tree.write(
+      path.join(testProjectRoot, 'project.json'),
+      JSON.stringify({
+        name: testProjectName,
+        targets: {
+          build: {},
+        },
+      }),
+    );
+
+    await configurationGenerator(tree, {
+      project: testProjectName,
+      registerSyncGeneratorLocally: false,
+      taskName: 'build',
+    });
+
+    const projectConfig = readProjectConfiguration(tree, testProjectName);
+    expect(projectConfig.targets?.build?.syncGenerators).toBeUndefined();
+  });
 });

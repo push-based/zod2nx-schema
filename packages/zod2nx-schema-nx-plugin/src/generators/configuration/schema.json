@@ -1,35 +1,44 @@
 {
   "$schema": "http://json-schema.org/schema",
   "type": "object",
-  "required": ["project", "skipConfig", "skipFormat"],
+  "required": ["project", "skipConfig", "skipFormat", "registerSyncGenerator"],
   "additionalProperties": true,
   "$id": "ConfigurationSchema",
   "title": "ConfigurationSchema Generator Options",
   "properties": {
     "project": {
+      "type": "string",
       "describe": "The name of the project.",
       "prompt": "Which project should configure Zod2NxSchema?",
       "dropdown": "projects",
-      "type": "string",
       "$default": {
         "$source": "argv",
         "index": 0
       }
     },
     "bin": {
-      "describe": "Path to Zod2NxSchema CLI",
-      "type": "string"
+      "type": "string",
+      "describe": "Path to Zod2NxSchema CLI"
     },
     "skipConfig": {
+      "type": "boolean",
       "describe": "Skip adding the zod2nx-schema.config.ts to the project root.",
-      "default": false,
-      "type": "boolean"
+      "default": false
     },
     "skipFormat": {
+      "type": "boolean",
       "describe": "Skip formatting of changed files",
-      "default": false,
-      "type": "boolean"
+      "default": false
+    },
+    "registerSyncGenerator": {
+      "type": "boolean",
+      "describe": "Register the sync generator for a specific task",
+      "default": false
+    },
+    "taskName": {
+      "type": "string",
+      "describe": "The task name to register the sync generator for (e.g., build, lint)"
     }
   },
-  "description": "configuration generator"
+  "description": "Configuration generator"
 }

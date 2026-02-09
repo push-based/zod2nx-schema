@@ -1,3 +1,3 @@
-import { GenerateSchemaOptions } from '@push-based/zod2nx-schema';
-
-export default [] satisfies GenerateSchemaOptions[];
+// Using --fromPkg option instead of explicit config
+// The schemas are auto-detected from generators.json and executors.json
+export default [] as const;

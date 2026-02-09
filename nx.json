@@ -126,12 +126,20 @@
         "packageRoot": "{projectRoot}/dist",
         "registry": "https://registry.npmjs.org/"
       }
+    },
+    "@nx/js:tsc": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "workspaceLayout": {
     "libsDir": "packages"
   },
   "generators": {},
+  "sync": {
+    "globalGenerators": ["@push-based/zod2nx-schema-nx-plugin:sync-schemas"]
+  },
   "release": {
     "projects": ["packages/*"],
     "projectsRelationship": "fixed",
