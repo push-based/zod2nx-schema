@@ -3,6 +3,7 @@
 
 ---
 
+[![npm version](https://img.shields.io/npm/v/@push-based/zod2nx-schema.svg)](https://www.npmjs.com/package/@push-based/zod2nx-schema)
 [![license](https://img.shields.io/github/license/push-based/zod2nx-schema)](https://opensource.org/licenses/MIT)
 
 ---
