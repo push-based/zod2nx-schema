@@ -1,15 +1,15 @@
 {
-  "name": "@push-based/zod2nx-schma-workspace",
+  "name": "@push-based/zod2nx-schema-workspace",
   "version": "0.0.0",
   "license": "MIT",
   "description": "",
-  "homepage": "https://github.com/push-based/zod2nx-schma",
+  "homepage": "https://github.com/push-based/zod2nx-schema",
   "bugs": {
-    "url": "https://github.com/push-based/zod2nx-schma/issues?q=is%3Aissue%20state%3Aopen%20type%3ABug"
+    "url": "https://github.com/push-based/zod2nx-schema/issues?q=is%3Aissue%20state%3Aopen%20type%3ABug"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/push-based/zod2nx-schma.git"
+    "url": "git+https://github.com/push-based/zod2nx-schema.git"
   },
   "type": "module",
   "scripts": {

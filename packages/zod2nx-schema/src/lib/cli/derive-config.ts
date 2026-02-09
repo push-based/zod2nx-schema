@@ -1,11 +1,11 @@
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import { toPascalCaseSchemaName } from '../utils/transform.js';
-import type { Zond2NxSchemaConfig } from './read-rc-file.js';
+import type { Zod2NxSchemaConfig } from './read-rc-file.js';
 
 export async function loadConfigFromPackageJson(
   pkgPath: string,
-): Promise<Zond2NxSchemaConfig> {
+): Promise<Zod2NxSchemaConfig> {
   const projectRoot = path.dirname(pkgPath);
   const toAbsolute = (p: string) =>
     path.isAbsolute(p) ? p : path.join(projectRoot, p);
@@ -115,7 +115,7 @@ export function runnableEntryToSchemaOptions(
   id: string,
   entry: RunnableEntry,
   projectRoot: string,
-): Zond2NxSchemaConfig[number] {
+): Zod2NxSchemaConfig[number] {
   const name = toPascalCaseSchemaName(id);
 
   const aliasesText = entry.aliases?.length
@@ -141,7 +141,7 @@ export function runnablesToSchemaOptions(
   kind: RunnableKind,
   runnables: Record<string, RunnableEntry>,
   projectRoot: string,
-): Zond2NxSchemaConfig {
+): Zod2NxSchemaConfig {
   return Object.entries(runnables).map(([id, entry]) =>
     runnableEntryToSchemaOptions(kind, id, entry, projectRoot),
   );

@@ -10,16 +10,16 @@ import {
   ZOD2NX_SCHEMA_CONFIG_NAME,
 } from './constant.js';
 
-export const zond2NxSchemaConfigSchema = z.array(
+export const zod2NxSchemaConfigSchema = z.array(
   generateZod2NxSchemaOptionsSchema,
 );
 
-export type Zond2NxSchemaConfig = z.infer<typeof zond2NxSchemaConfigSchema>;
+export type Zod2NxSchemaConfig = z.infer<typeof zod2NxSchemaConfigSchema>;
 
 export async function readRcByPath(
   filePath: string,
   tsconfig?: string,
-): Promise<Zond2NxSchemaConfig> {
+): Promise<Zod2NxSchemaConfig> {
   const formattedTarget = [
     `${ansis.bold(path.relative(process.cwd(), filePath))}`,
     tsconfig &&
@@ -39,14 +39,14 @@ export async function readRcByPath(
     return `Imported config from ${formattedTarget}`;
   });
 
-  const config = validate(zond2NxSchemaConfigSchema, result, { filePath });
+  const config = validate(zod2NxSchemaConfigSchema, result, { filePath });
   logger.info('Configuration is valid ✓');
   return config;
 }
 
 export async function autoloadRc(
   tsconfig?: string,
-): Promise<Zond2NxSchemaConfig> {
+): Promise<Zod2NxSchemaConfig> {
   const configFilePatterns = [
     ZOD2NX_SCHEMA_CONFIG_NAME,
     `{${SUPPORTED_CONFIG_FILE_FORMATS.join(',')}}`,
