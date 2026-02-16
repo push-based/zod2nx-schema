@@ -1,3 +1,13 @@
+## 0.0.4 (2026-02-16)
+
+### 🩹 Fixes
+
+- prettier tests time out with 5 seconds limit ([047f8e0](https://github.com/push-based/zod2nx-schema/commit/047f8e0))
+
+### ❤️ Thank You
+
+- malua @malua
+
 ## 0.0.3 (2026-02-09)
 
 ### 🩹 Fixes
