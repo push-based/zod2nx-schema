@@ -1,3 +1,13 @@
+## 0.0.3 (2026-02-09)
+
+### 🩹 Fixes
+
+- typos zond -> zod, schma -> schema ([ebded83](https://github.com/push-based/zod2nx-schema/commit/ebded83))
+
+### ❤️ Thank You
+
+- malua @malua
+
 ## 0.0.2 (2025-12-21)
 
 ### 🩹 Fixes
