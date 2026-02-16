@@ -83,7 +83,7 @@ describe('formatWithPrettier', () => {
   it(
     'should format a JSON file without throwing',
     {
-      timeout: 10000,
+      timeout: 10_000,
     },
     async () => {
       // Write a valid JSON file
@@ -99,7 +99,7 @@ describe('formatWithPrettier', () => {
 
   it(
     'should format a TypeScript file with correct spacing',
-    { timeout: 10000 },
+    { timeout: 10_000 },
     async () => {
       // TypeScript with inconsistent formatting
       const tsFilePath = path.join(tempDir, 'test.ts');
