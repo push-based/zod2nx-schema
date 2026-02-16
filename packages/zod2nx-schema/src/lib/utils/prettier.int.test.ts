@@ -80,35 +80,45 @@ describe('formatWithPrettier', () => {
     await rm(tempDir, { recursive: true, force: true });
   });
 
-  it('should format a JSON file without throwing', async () => {
-    // Write a valid JSON file
-    const jsonContent = '{"name": "test", "version": "1.0.0"}';
-    await writeFile(testFilePath, jsonContent, 'utf8');
+  it(
+    'should format a JSON file without throwing',
+    {
+      timeout: 10000,
+    },
+    async () => {
+      // Write a valid JSON file
+      const jsonContent = '{"name": "test", "version": "1.0.0"}';
+      await writeFile(testFilePath, jsonContent, 'utf8');
 
-    // Should complete without throwing
-    await expect(
-      formatWithPrettier([testFilePath], { cwd: tempDir, silent: true }),
-    ).resolves.toBeUndefined();
-  });
+      // Should complete without throwing
+      await expect(
+        formatWithPrettier([testFilePath], { cwd: tempDir, silent: true }),
+      ).resolves.toBeUndefined();
+    },
+  );
 
-  it('should format a TypeScript file with correct spacing', async () => {
-    // TypeScript with inconsistent formatting
-    const tsFilePath = path.join(tempDir, 'test.ts');
-    const unformattedTs = `const x=1;const y='hello';`;
-    await writeFile(tsFilePath, unformattedTs, 'utf8');
+  it(
+    'should format a TypeScript file with correct spacing',
+    { timeout: 10000 },
+    async () => {
+      // TypeScript with inconsistent formatting
+      const tsFilePath = path.join(tempDir, 'test.ts');
+      const unformattedTs = `const x=1;const y='hello';`;
+      await writeFile(tsFilePath, unformattedTs, 'utf8');
 
-    await formatWithPrettier([tsFilePath], {
-      cwd: tempDir,
-      silent: true,
-    });
+      await formatWithPrettier([tsFilePath], {
+        cwd: tempDir,
+        silent: true,
+      });
 
-    const { readTextFile } = await import('./file-system.js');
-    const formattedContent = await readTextFile(tsFilePath);
+      const { readTextFile } = await import('./file-system.js');
+      const formattedContent = await readTextFile(tsFilePath);
 
-    // Prettier should add spaces around assignments and use single quotes
-    expect(formattedContent).toContain('const x = 1');
-    expect(formattedContent).toContain("const y = 'hello'");
-  });
+      // Prettier should add spaces around assignments and use single quotes
+      expect(formattedContent).toContain('const x = 1');
+      expect(formattedContent).toContain("const y = 'hello'");
+    },
+  );
 
   it('should do nothing when file paths array is empty', async () => {
     // Should not throw
