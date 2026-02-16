@@ -1,3 +1,14 @@
+## 0.0.5 (2026-02-16)
+
+### 🩹 Fixes
+
+- use numeric seperators ([ab197a0](https://github.com/push-based/zod2nx-schema/commit/ab197a0))
+- prettier tries to format CHANGELOG.md ([28f85ec](https://github.com/push-based/zod2nx-schema/commit/28f85ec))
+
+### ❤️ Thank You
+
+- malua @malua
+
 ## 0.0.4 (2026-02-16)
 
 ### 🩹 Fixes
