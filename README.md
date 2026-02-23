@@ -1,15 +1,16 @@
-<h1 align="center">Zod to NX Schema</h1>
-<h2 align="center">Convert Zod schemas to Nx executor schema.json files</h2>
+<h1 align="center">Zod to Nx Schema</h1>
+<h2 align="center">Convert Zod schemas to Nx executor/generator schema.json files</h2>
 
 ---
 
+[![npm version](https://img.shields.io/npm/v/@push-based/zod2nx-schema.svg)](https://www.npmjs.com/package/@push-based/zod2nx-schema)
 [![license](https://img.shields.io/github/license/push-based/zod2nx-schema)](https://opensource.org/licenses/MIT)
 
 ---
 
 ## Overview
 
-`zod2nx-schema` is a tool that converts Zod schemas into Nx executor schema.json files. This makes it easy to define executor options using Zod's type-safe schema validation and automatically generate the JSON schema files that Nx requires.
+`zod2nx-schema` is a tool that converts Zod schemas into Nx executor/generator schema.json files. This makes it easy to define executor options using Zod's type-safe schema validation and automatically generate the JSON schema files that Nx requires.
 
 ## Packages
 
