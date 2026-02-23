@@ -1,3 +1,19 @@
+## 0.1.0 (2026-02-23)
+
+### 🚀 Features
+
+- add generator options for sync generator setup ([785c794](https://github.com/push-based/zod2nx-schema/commit/785c794))
+- add sync generator ([5f3afa1](https://github.com/push-based/zod2nx-schema/commit/5f3afa1))
+
+### 🩹 Fixes
+
+- add sync-generator ([e5c215e](https://github.com/push-based/zod2nx-schema/commit/e5c215e))
+- wip ([8d8f6e2](https://github.com/push-based/zod2nx-schema/commit/8d8f6e2))
+
+### ❤️ Thank You
+
+- Michael Hladky @BioPhoton
+
 ## 0.0.5 (2026-02-16)
 
 ### 🩹 Fixes
