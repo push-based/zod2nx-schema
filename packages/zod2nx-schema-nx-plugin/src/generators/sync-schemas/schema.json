@@ -1,0 +1,9 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "additionalProperties": true,
+  "$id": "SyncSchemasSchema",
+  "title": "SyncSchemasSchema Generator Options",
+  "properties": {},
+  "description": "Detect when schema.json files are out of sync with Zod definitions"
+}

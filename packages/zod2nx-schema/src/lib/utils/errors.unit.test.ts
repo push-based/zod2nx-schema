@@ -1,6 +1,48 @@
 import ansis from 'ansis';
+import path from 'node:path';
 import { z } from 'zod';
-import { SchemaValidationError, stringifyError } from './errors.js';
+import {
+  MissingSchemaFilesError,
+  SchemaValidationError,
+  stringifyError,
+} from './errors.js';
+
+describe('MissingSchemaFilesError', () => {
+  it('should list missing files with relative paths', () => {
+    const cwd = process.cwd();
+    const missingFiles = [
+      path.join(cwd, 'src/generators/foo/schema.ts'),
+      path.join(cwd, 'src/generators/bar/schema.ts'),
+    ];
+
+    const error = new MissingSchemaFilesError(missingFiles);
+
+    expect(error.message).toContain(`Missing schema files:`);
+    expect(error.message).toContain(`foo`);
+    expect(error.message).toContain(`bar`);
+    expect(error.message).toContain(`Create these files manually.`);
+    expect(error.missingFiles).toEqual(missingFiles);
+  });
+
+  it('should preserve original cause when provided', () => {
+    const cause = new Error('Original import error');
+    const missingFiles = ['/some/path/schema.ts'];
+
+    const error = new MissingSchemaFilesError(missingFiles, cause);
+
+    expect(error.cause).toBe(cause);
+  });
+
+  it('should handle single missing file', () => {
+    const cwd = process.cwd();
+    const missingFiles = [path.join(cwd, 'src/schema.ts')];
+
+    const error = new MissingSchemaFilesError(missingFiles);
+    expect(error.message).toContain(`Missing schema files:`);
+    expect(error.message).toContain(`schema.ts`);
+    expect(error.message).toContain(`Create these files manually.`);
+  });
+});
 
 describe('stringifyError', () => {
   it('should use only message from plain Error instance', () => {

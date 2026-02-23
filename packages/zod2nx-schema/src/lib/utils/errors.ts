@@ -7,6 +7,22 @@ type SchemaValidationContext = {
   filePath?: string;
 };
 
+export class MissingSchemaFilesError extends Error {
+  public readonly missingFiles: string[];
+
+  constructor(missingFiles: string[], cause?: Error) {
+    const relativePaths = missingFiles.map(f =>
+      path.relative(process.cwd(), f),
+    );
+    const filesList = relativePaths.map(f => `  - ${f}`).join('\n');
+    const message = `Missing schema files:\n${filesList}\n\nCreate these files manually.`;
+
+    super(message, { cause });
+    this.name = MissingSchemaFilesError.name;
+    this.missingFiles = missingFiles;
+  }
+}
+
 export class SchemaValidationError extends Error {
   constructor(
     error: ZodError,

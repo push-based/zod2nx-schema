@@ -173,7 +173,6 @@ describe('nx-plugin', () => {
     });
 
     const cleanStdout = removeColorCodes(stdout);
-    // Nx command ran successfully
     expect(cleanStdout).toContain('nx run ui:zod2nx-schema');
     expect(cleanStdout).toContain('Successfully ran target zod2nx-schema');
   });
@@ -217,7 +216,6 @@ describe('nx-plugin', () => {
     expect(code).toBe(0);
 
     expect(projectJson['targets']).toBeDefined();
-    // Without the plugin registered, no dynamic targets should be added
     expect(projectJson['targets']).not.toHaveProperty('zod2nx-schema');
     expect(projectJson['targets']).not.toHaveProperty(
       'zod2nx-schema--configuration',

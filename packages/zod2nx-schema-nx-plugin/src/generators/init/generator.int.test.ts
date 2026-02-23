@@ -84,4 +84,34 @@ describe('init generator', () => {
     const targetDefaults = readNxJson(tree)!.targetDefaults!;
     expect(targetDefaults).not.toHaveProperty(cpTargetName);
   });
+
+  it('should register sync generator globally', () => {
+    initGenerator(tree, { registerSyncGeneratorGlobally: true });
+    // nx.json
+    const nxJson = readNxJson(tree)!;
+    expect(nxJson.sync?.globalGenerators).toContain(
+      '@push-based/zod2nx-schema-nx-plugin:sync-schemas',
+    );
+  });
+
+  it('should not register sync generator globally by default', () => {
+    initGenerator(tree, {});
+    // nx.json
+    const nxJson = readNxJson(tree)!;
+    expect(nxJson.sync?.globalGenerators).toBeUndefined();
+  });
+
+  it('should register plugin in nx.json plugins array', () => {
+    initGenerator(tree, { registerPlugin: true });
+    // nx.json
+    const nxJson = readNxJson(tree)!;
+    expect(nxJson.plugins).toContain('@push-based/zod2nx-schema-nx-plugin');
+  });
+
+  it('should not register plugin by default', () => {
+    initGenerator(tree, {});
+    // nx.json
+    const nxJson = readNxJson(tree)!;
+    expect(nxJson.plugins).toBeUndefined();
+  });
 });

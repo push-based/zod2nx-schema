@@ -1,7 +1,13 @@
 {
   "$schema": "http://json-schema.org/schema",
   "type": "object",
-  "required": ["skipPackageJson", "skipInstall", "skipNxJson"],
+  "required": [
+    "skipPackageJson",
+    "skipInstall",
+    "skipNxJson",
+    "registerSyncGeneratorGlobally",
+    "registerPlugin"
+  ],
   "additionalProperties": true,
   "$id": "InitSchema",
   "title": "InitSchema Generator Options",
@@ -17,7 +23,15 @@
     "skipNxJson": {
       "default": false,
       "type": "boolean"
+    },
+    "registerSyncGeneratorGlobally": {
+      "default": false,
+      "type": "boolean"
+    },
+    "registerPlugin": {
+      "default": false,
+      "type": "boolean"
     }
   },
-  "description": "init generator"
+  "description": "Init generator"
 }

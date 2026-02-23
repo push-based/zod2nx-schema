@@ -54,7 +54,11 @@ function moveToDevDependencies(tree: Tree) {
   });
 }
 
-function updateNxJsonConfig(tree: Tree) {
+function updateNxJsonConfig(
+  tree: Tree,
+  registerSyncGeneratorGlobally?: boolean,
+  registerPlugin?: boolean,
+) {
   const nxJson: NxJsonConfiguration = readNxJson(tree) as NxJsonConfiguration;
 
   nxJson.targetDefaults ??= {};
@@ -63,6 +67,22 @@ function updateNxJsonConfig(tree: Tree) {
     cache: true,
   };
 
+  if (registerSyncGeneratorGlobally) {
+    nxJson.sync ??= {};
+    nxJson.sync.globalGenerators ??= [];
+    const syncGeneratorName = `${PACKAGE_NAME}:sync-schemas`;
+    if (!nxJson.sync.globalGenerators.includes(syncGeneratorName)) {
+      nxJson.sync.globalGenerators.push(syncGeneratorName);
+    }
+  }
+
+  if (registerPlugin) {
+    nxJson.plugins ??= [];
+    if (!nxJson.plugins.includes(PACKAGE_NAME)) {
+      nxJson.plugins.push(PACKAGE_NAME);
+    }
+  }
+
   updateNxJson(tree, nxJson);
 }
 
@@ -70,7 +90,11 @@ export function initGenerator(tree: Tree, schema: InitGeneratorSchema) {
   if (schema.skipNxJson) {
     logger.info(`Skip updating nx.json`);
   } else {
-    updateNxJsonConfig(tree);
+    updateNxJsonConfig(
+      tree,
+      schema.registerSyncGeneratorGlobally,
+      schema.registerPlugin,
+    );
   }
 
   const tasks = [];

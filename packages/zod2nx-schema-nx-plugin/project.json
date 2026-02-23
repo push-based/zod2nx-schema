@@ -22,7 +22,7 @@
       }
     },
     "build": {
-      "dependsOn": ["^build", "zod2nx-schema"],
+      "dependsOn": ["^build"],
       "options": {
         "assets": [
           "{projectRoot}/*.md",

@@ -29,7 +29,8 @@
       "@push-based/zod2nx-schema": ["packages/zod2nx-schema/src/index.ts"],
       "@push-based/zod2nx-schema-nx-plugin": [
         "packages/zod2nx-schema-nx-plugin/src/index.ts"
-      ]
+      ],
+      "@push-based/my-plugin": ["demo/my-plugin/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -1,0 +1,19 @@
+{
+  "generators": {
+    "my-generator": {
+      "factory": "./src/generators/my-generator/my-generator",
+      "schema": "./src/generators/my-generator/schema.json",
+      "description": "my-generator generator"
+    },
+    "other-generator": {
+      "factory": "./src/generators/other-generator/other-generator",
+      "schema": "./src/generators/other-generator/schema.json",
+      "description": "other-generator generator"
+    },
+    "good-generator": {
+      "factory": "./src/generators/good-generator/good-generator",
+      "schema": "./src/generators/good-generator/schema.json",
+      "description": "good-generator generator"
+    }
+  }
+}

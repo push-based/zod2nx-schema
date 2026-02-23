@@ -1,3 +1,5 @@
+export { importModule } from './lib/utils/file-system.js';
+
 export { zod2nxSchema } from './lib/schema/zod2nx-schema.js';
 export {
   generateSchemaFile,

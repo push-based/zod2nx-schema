@@ -18,17 +18,17 @@
       "type": "string"
     },
     "command": {
-      "describe": "The command to run (e.g., 'convert')",
       "type": "string",
       "enum": ["convert", "print-config", "help"],
+      "describe": "The command to run (e.g., 'convert')",
       "$default": {
         "$source": "argv",
         "index": 0
       }
     },
     "fromPkg": {
-      "describe": "Path to package.json of the Nx plugin for auto deriving schemas",
-      "type": "string"
+      "type": "string",
+      "describe": "Path to package.json of the Nx plugin for auto deriving schemas"
     },
     "config": {
       "describe": "Path to a configuration file (if not provided, e.g. zod2nx-schema.config.ts)",
@@ -47,17 +47,17 @@
       "type": "string"
     },
     "schema": {
-      "description": "Path to the module exporting the Zod schema",
-      "type": "string"
+      "type": "string",
+      "description": "Path to the module exporting the Zod schema"
     },
     "outPath": {
-      "description": "Path to output the generated JSON schema file",
-      "type": "string"
+      "type": "string",
+      "description": "Path to output the generated JSON schema file"
     },
     "exportName": {
-      "description": "Name of the export in the module (default: \"default\")",
-      "type": "string"
+      "type": "string",
+      "description": "Name of the export in the module (default: \"default\")"
     }
   },
-  "description": "CodePushup CLI executor. Executes the @push-based/zod2nx-schema command's See: https://github.com/push-based/zod2nx-schema/blob/main/packages/zod2nx-schema/README.md#commands"
+  "description": "Zod to NxSchema executor. Executes the @push-based/zod2nx-schema command's See: https://github.com/push-based/zod2nx-schema/README.md#commands"
 }
